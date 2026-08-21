@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇮🇳</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SAHAYAK AI — AI-Powered Government Service Navigator | SIH 2026</title>
+    <meta name="description" content="Sahayak AI helps Indian citizens identify the right government services, check eligibility, and generate step-by-step action plans grounded in verified sources." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN Fallback for Zero-Config Preview -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              sih: {
+                primary: '#0F172A',
+                accent: '#2563EB',
+                saffron: '#F97316',
+                green: '#16A34A',
+                emerald: '#059669',
+                surface: '#F8FAFC',
+                card: '#FFFFFF',
+                border: '#E2E8F0',
+                muted: '#64748B',
+                highlight: '#EFF6FF'
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              display: ['Outfit', 'Inter', 'sans-serif']
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-blue-600 selection:text-white">
+    <!-- Main React Mount Point -->
+    <div id="root"></div>
+
+    <!-- Main JavaScript Entrypoint -->
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
