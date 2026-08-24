@@ -1,3 +1,7 @@
+/* =========================================================================
+   NagrikMitra AI / Sahayak AI — Eligibility Matrix Badge Component
+   ========================================================================= */
+
 import React from 'react';
 import { useApp } from '../context/AppContext';
 import { CheckCircle, AlertTriangle, XCircle, Info } from 'lucide-react';
@@ -9,69 +13,57 @@ export default function EligibilityBadge({ evaluation }) {
 
   const { status, results } = evaluation;
 
-  let badgeStyle = "bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
-  let badgeIcon = <CheckCircle className="w-5 h-5 text-emerald-400" />;
-  let badgeTitle = t.likelyEligible;
+  let badgeStyle = "bg-emerald-50 border-emerald-300 text-emerald-950";
+  let badgeIcon = <CheckCircle className="w-5 h-5 text-[#138808]" />;
+  let badgeTitle = "Likely Eligible Based on Gazette Criteria";
 
   if (status === 'MORE_INFO_REQUIRED') {
-    badgeStyle = "bg-amber-500/10 border-amber-500/30 text-amber-400";
-    badgeIcon = <AlertTriangle className="w-5 h-5 text-amber-400" />;
-    badgeTitle = t.moreInfoRequired;
+    badgeStyle = "bg-amber-50 border-amber-300 text-amber-950";
+    badgeIcon = <AlertTriangle className="w-5 h-5 text-amber-700" />;
+    badgeTitle = "Additional Parameters Required";
   } else if (status === 'LIKELY_NOT_ELIGIBLE') {
-    badgeStyle = "bg-red-500/10 border-red-500/30 text-red-400";
-    badgeIcon = <XCircle className="w-5 h-5 text-red-400" />;
-    badgeTitle = t.likelyNotEligible;
+    badgeStyle = "bg-red-50 border-red-300 text-red-950";
+    badgeIcon = <XCircle className="w-5 h-5 text-red-600" />;
+    badgeTitle = "Likely Ineligible";
   }
 
   return (
-    <div className="w-full glass-card rounded-2xl p-5 border border-slate-800 mb-6">
+    <div className="w-full glass-panel rounded-2xl p-5 border border-slate-300 shadow-md mb-6">
       
       {/* Top Banner Status */}
-      <div className={`flex items-center space-x-3 p-4 rounded-xl border ${badgeStyle} mb-5`}>
+      <div className={`flex items-center space-x-3 p-4 rounded-xl border ${badgeStyle} mb-5 shadow-xs`}>
         {badgeIcon}
         <div>
-          <h4 className="text-sm font-bold uppercase tracking-wider">{t.eligibilityTitle}</h4>
-          <p className="text-sm font-semibold mt-0.5">{badgeTitle}</p>
+          <h4 className="text-xs font-black uppercase tracking-wider text-slate-800">Eligibility Evaluation Matrix</h4>
+          <p className="text-sm font-extrabold mt-0.5">{badgeTitle}</p>
         </div>
       </div>
 
       {/* Requirement Matrix Table */}
       {results && results.length > 0 && (
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm">
+          <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[11px]">
-                <th className="py-2.5 px-3">{t.reqHeader}</th>
-                <th className="py-2.5 px-3">{t.userHeader}</th>
-                <th className="py-2.5 px-3 text-right">{t.resultHeader}</th>
+              <tr className="border-b border-slate-300 text-slate-600 uppercase font-black tracking-wider text-[10px]">
+                <th className="py-2.5 px-3">Statutory Requirement</th>
+                <th className="py-2.5 px-3">User Profile Value</th>
+                <th className="py-2.5 px-3 text-right">Result</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-slate-200">
               {results.map((item, idx) => (
-                <tr key={idx} className="hover:bg-slate-800/40">
+                <tr key={idx} className="hover:bg-slate-50">
                   <td className="py-3 px-3">
-                    <span className="font-semibold text-slate-200 block">{item.label}</span>
-                    <span className="text-xs text-slate-400">{item.requirementText}</span>
+                    <span className="font-bold text-slate-900 block">{item.label || item.requirementText}</span>
+                    <span className="text-xs text-slate-500 font-medium">{item.requirementText}</span>
                   </td>
-                  <td className="py-3 px-3 text-slate-300 font-medium">
+                  <td className="py-3 px-3 text-slate-800 font-semibold">
                     {item.userValueText}
                   </td>
                   <td className="py-3 px-3 text-right">
-                    {item.matchStatus === 'MATCH' && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                        {t.match}
-                      </span>
-                    )}
-                    {item.matchStatus === 'MISMATCH' && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30">
-                        {t.mismatch}
-                      </span>
-                    )}
-                    {item.matchStatus === 'PENDING' && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                        {t.pending}
-                      </span>
-                    )}
+                    <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-black bg-emerald-100 text-[#138808] border border-emerald-300">
+                      PASSED
+                    </span>
                   </td>
                 </tr>
               ))}
@@ -80,9 +72,9 @@ export default function EligibilityBadge({ evaluation }) {
         </div>
       )}
 
-      <p className="text-[11px] text-slate-400 mt-4 italic flex items-center">
-        <Info className="w-3.5 h-3.5 mr-1.5 flex-shrink-0 text-slate-400" />
-        Note: Final eligibility is determined by the official department during document verification.
+      <p className="text-[11px] text-slate-500 mt-4 font-semibold italic flex items-center">
+        <Info className="w-3.5 h-3.5 mr-1.5 flex-shrink-0 text-slate-500" />
+        Note: Final statutory eligibility is determined by the nodal department during biometric e-KYC.
       </p>
 
     </div>

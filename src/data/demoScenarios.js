@@ -1,116 +1,84 @@
-// Pre-loaded SIH Demo Scenarios for Instant Judge Demonstration
+/* =========================================================================
+   NagrikMitra AI / Sahayak AI — Jury & Presentation Demo Scenarios
+   ========================================================================= */
 
 export const DEMO_SCENARIOS = [
   {
     id: "demo-scholarship",
-    title: "DEMO 1 — Engineering Scholarship",
-    query: "I am a first-year engineering student from Maharashtra and I need a scholarship.",
+    title: "DEMO 1 — Engineering Student Scholarship",
+    query: "I am a 22-year-old student from Maharashtra and I need financial assistance for my college tuition fees.",
     language: "en",
     context: {
-      intent: "Scholarship / Financial Assistance",
+      intent: "Scholarship & Financial Aid",
       category: "Education",
       state: "Maharashtra",
       user_type: "Student",
-      course: "Engineering",
-      year: "1st Year",
-      income: 450000
+      course: "Undergraduate Engineering",
+      income: "₹1.5 Lakh – ₹2.5 Lakh"
     },
-    serviceId: "edu-mahadbt-post-matric",
+    serviceId: "nsp-scholarship",
     questions: [
       {
         id: "income",
-        question: "What is your family's annual income approx?",
-        options: ["Under ₹2.5 Lakhs", "Under ₹8 Lakhs", "Above ₹8 Lakhs"],
-        answer: "Under ₹8 Lakhs",
+        question: "What is your family's annual income level?",
+        options: ["Below ₹1.5 Lakh (BPL/EWS)", "₹1.5 Lakh – ₹2.5 Lakh", "Above ₹2.5 Lakh"],
+        answer: "₹1.5 Lakh – ₹2.5 Lakh",
         field: "income",
-        value: 450000
+        value: "₹1.5 Lakh – ₹2.5 Lakh"
       }
     ]
   },
   {
-    id: "demo-aadhaar",
-    title: "DEMO 2 — Lost Aadhaar Card",
-    query: "I lost my Aadhaar card. What should I do?",
+    id: "demo-farmer",
+    title: "DEMO 2 — Small Farmer Drought Compensation & Income Support",
+    query: "I am a small farmer in Maharashtra facing crop loss due to drought. Is there any financial support or crop insurance scheme for me?",
     language: "en",
     context: {
-      intent: "Aadhaar Card Replacement / Download",
-      category: "Identity",
-      state: "All India",
-      user_type: "Individual",
-      action: "Duplicate / Re-issue"
-    },
-    serviceId: "id-aadhaar-lost-duplicate",
-    questions: [
-      {
-        id: "mobile_linked",
-        question: "Is your mobile number linked to your Aadhaar card?",
-        options: ["Yes, mobile is active & linked", "No, or I don't remember"],
-        answer: "Yes, mobile is active & linked",
-        field: "mobile_linked",
-        value: true
-      }
-    ]
-  },
-  {
-    id: "demo-pension",
-    title: "DEMO 3 — Senior Citizen Pension",
-    query: "My mother needs help applying for a pension.",
-    language: "en",
-    context: {
-      intent: "Old Age Pension Scheme",
-      category: "Social Welfare",
-      user_type: "Senior Citizen",
-      relation: "Mother"
-    },
-    serviceId: "welfare-nsap-oldage-pension",
-    questions: [
-      {
-        id: "age",
-        question: "How old is your mother?",
-        options: ["60 years or above", "Under 60 years"],
-        answer: "60 years or above",
-        field: "age",
-        value: 62
-      },
-      {
-        id: "category",
-        question: "Does your family possess a BPL / Low Income Card?",
-        options: ["Yes, BPL Ration Card", "No / General Category"],
-        answer: "Yes, BPL Ration Card",
-        field: "category",
-        value: "BPL"
-      }
-    ]
-  },
-  {
-    id: "demo-certificate",
-    title: "DEMO 4 — Caste Certificate (Maharashtra)",
-    query: "I need to apply for a caste certificate.",
-    language: "en",
-    context: {
-      intent: "Caste Certificate Issuance",
-      category: "Certificates",
+      intent: "Direct Income Support & Crop Loss Insurance",
+      category: "Farmer Services",
       state: "Maharashtra",
-      user_type: "Resident"
+      user_type: "Landholding Farmer",
+      income: "Below ₹1.5 Lakh"
     },
-    serviceId: "cert-caste-certificate-mh",
+    serviceId: "pm-kisan",
     questions: [
       {
-        id: "state",
-        question: "Which state are you a resident of?",
-        options: ["Maharashtra", "Delhi", "Other State"],
-        answer: "Maharashtra",
-        field: "state",
-        value: "Maharashtra"
-      },
-      {
-        id: "caste_category",
-        question: "Which reserved category do you belong to?",
-        options: ["OBC", "SC", "ST", "VJNT / SBC"],
-        answer: "OBC",
-        field: "category",
-        value: "OBC"
+        id: "land",
+        question: "Do you own cultivable agricultural land registered in 7/12 / Khatoni?",
+        options: ["Yes, registered owner", "Tenant farmer", "Landless agriculture worker"],
+        answer: "Yes, registered owner",
+        field: "land_holding",
+        value: "Own Cultivable Land"
       }
     ]
+  },
+  {
+    id: "demo-grievance",
+    title: "DEMO 3 — CPGRAMS Public Grievance (NSP Delay > 45 Days)",
+    query: "I applied for my National Scholarship on scholarships.gov.in 45 days ago. My college verified it, but state disbursal has been stuck with no status update.",
+    language: "en",
+    context: {
+      intent: "CPGRAMS Public Grievance",
+      category: "Grievance & Redressal",
+      department: "Education / Scholarship Portal",
+      days_pending: 45,
+      ref_number: "MH2026-NSP-9921"
+    },
+    serviceId: "cpgrams",
+    questions: []
+  },
+  {
+    id: "demo-solar",
+    title: "DEMO 4 — PM Surya Ghar Free Solar Electricity",
+    query: "I want to install rooftop solar panels at home to get free electricity units under government subsidy.",
+    language: "en",
+    context: {
+      intent: "PM Surya Ghar Subsidy",
+      category: "Housing",
+      state: "All",
+      user_type: "Homeowner"
+    },
+    serviceId: "pm-surya-ghar",
+    questions: []
   }
 ];

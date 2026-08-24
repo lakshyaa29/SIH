@@ -1,6 +1,6 @@
 // AI Engine: Intent Classification, Entity Extraction, Multilingual Detection & Follow-up Generator
 
-import { GOVERNMENT_SERVICES } from '../data/governmentServices';
+import { ALL_GOVERNMENT_SERVICES as GOVERNMENT_SERVICES } from '../data/governmentServices';
 import { matchGovernmentService } from './ragRetriever';
 
 /**
@@ -8,15 +8,23 @@ import { matchGovernmentService } from './ragRetriever';
  */
 export function detectLanguage(text) {
   if (!text) return 'en';
-  // Devanagari script regex range: \u0900-\u097F
-  const devanagariPattern = /[\u0900-\u097F]/;
-  if (devanagariPattern.test(text)) {
-    // Check Marathi specific words
+  
+  if (/[\u0A00-\u0A7F]/.test(text)) return 'pa'; // Gurmukhi / Punjabi
+  if (/[\u0A80-\u0AFF]/.test(text)) return 'gu'; // Gujarati
+  if (/[\u0980-\u09FF]/.test(text)) return 'bn'; // Bengali
+  if (/[\u0B80-\u0BFF]/.test(text)) return 'ta'; // Tamil
+  if (/[\u0C00-\u0C7F]/.test(text)) return 'te'; // Telugu
+  if (/[\u0C80-\u0CFF]/.test(text)) return 'kn'; // Kannada
+  if (/[\u0D00-\u0D7F]/.test(text)) return 'ml'; // Malayalam
+
+  // Devanagari script range: \u0900-\u097F
+  if (/[\u0900-\u097F]/.test(text)) {
     if (text.includes('आहे') || text.includes('मला') || text.includes('हवी') || text.includes('करू') || text.includes('दाखला')) {
-      return 'mr';
+      return 'mr'; // Marathi
     }
-    return 'hi';
+    return 'hi'; // Hindi
   }
+
   return 'en';
 }
 

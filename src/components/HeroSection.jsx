@@ -1,189 +1,179 @@
+/* =========================================================================
+   NagrikMitra AI / Sahayak AI — Fully Multilingual Hero Section Component
+   ========================================================================= */
+
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { DEMO_SCENARIOS } from '../data/demoScenarios';
-import { isSpeechSupported, startSpeechRecognition, stopSpeechRecognition } from '../services/speechRecognition';
-import { Search, Mic, MicOff, Sparkles, ArrowRight, ShieldCheck, FileCheck, CheckCircle2 } from 'lucide-react';
+import { startVoiceRecognition } from '../services/speechService';
+import { 
+  Search, Mic, Sparkles, Building2, ArrowRight, FileText, Scale 
+} from 'lucide-react';
 
 export default function HeroSection() {
-  const { t, startPipeline, language } = useApp();
-  const [inputText, setInputText] = useState('');
+  const { t, startPipeline, setActiveTab, resetPipeline, language } = useApp();
+  const [queryInput, setQueryInput] = useState('');
   const [isListening, setIsListening] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSearchSubmit = (e) => {
     e?.preventDefault();
-    if (!inputText.trim()) return;
-    startPipeline(inputText);
+    if (!queryInput.trim()) return;
+    startPipeline(queryInput);
   };
 
-  const handleExampleClick = (queryText, scenario = null) => {
-    setInputText(queryText);
-    startPipeline(queryText, scenario);
+  const handleVoiceInput = () => {
+    startVoiceRecognition(
+      language,
+      (transcript) => {
+        setQueryInput(transcript);
+        setIsListening(false);
+        startPipeline(transcript);
+      },
+      (errorMsg) => {
+        setIsListening(false);
+        alert(`Voice Input: ${errorMsg}`);
+      }
+    );
+    setIsListening(true);
   };
 
-  const toggleMic = () => {
-    if (isListening) {
-      stopSpeechRecognition();
-      setIsListening(false);
-    } else {
-      setIsListening(true);
-      startSpeechRecognition({
-        lang: language,
-        onResult: (transcript) => {
-          setInputText(transcript);
-        },
-        onError: (err) => {
-          console.warn('Mic error:', err);
-          setIsListening(false);
-        },
-        onEnd: () => {
-          setIsListening(false);
-        }
-      });
-    }
+  const handleScenarioClick = (scenario) => {
+    resetPipeline();
+    setQueryInput(scenario.query);
+    startPipeline(scenario.query, scenario);
   };
 
   return (
-    <section className="relative overflow-hidden py-12 lg:py-20 bg-gradient-to-b from-slate-900 via-slate-900/90 to-slate-950">
+    <section className="relative py-10 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-10">
       
-      {/* Subtle Background Glow Spheres */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-amber-500/10 blur-[100px] rounded-full pointer-events-none" />
-
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
+      {/* 1. Header Hero Title */}
+      <div className="text-center space-y-4 max-w-3xl mx-auto">
         
-        {/* Trust Pill Badge */}
-        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-6">
-          <ShieldCheck className="w-4 h-4 text-blue-400" />
-          <span>Grounded in Official Verified Indian Government Knowledge Base</span>
+        {/* Subtle Category Pill */}
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold shadow-xs">
+          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+          <span>{t.tagline || 'Your AI Guide to Government Services'}</span>
         </div>
 
-        {/* Main Heading */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white tracking-tight leading-tight mb-6">
-          {t.heroHeading}
+        <h1 className="text-3xl sm:text-5xl font-display font-extrabold text-[#0A192F] leading-tight tracking-tight">
+          {t.heroTitle || 'Find the Right Government Scheme for You'}
         </h1>
 
-        {/* Subheading */}
-        <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed mb-8">
-          {t.heroSubheading}
+        <p className="text-sm sm:text-base text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto">
+          {t.heroSub || 'Describe your situation in everyday words or speak in your language. Sahayak AI helps you find schemes, check requirements, and access official application links.'}
         </p>
 
-        {/* Search Input Box */}
-        <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto mb-8">
-          <div className="relative glass-panel rounded-2xl p-2 border border-slate-700/80 shadow-2xl focus-within:border-blue-500/80 transition-all">
-            <div className="flex items-center pl-3">
-              <Search className="w-5 h-5 text-slate-400 mr-2 flex-shrink-0" />
-              <input
-                type="text"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                placeholder={t.inputPlaceholder}
-                className="w-full bg-transparent text-white placeholder-slate-400 text-sm sm:text-base focus:outline-none py-2"
-              />
-              
-              {/* Speech Recognition Button */}
-              {isSpeechSupported() && (
-                <button
-                  type="button"
-                  onClick={toggleMic}
-                  className={`p-2.5 rounded-xl transition-all mr-1.5 ${
-                    isListening 
-                      ? 'bg-red-500 text-white listening-pulse' 
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                  }`}
-                  title="Voice Input (Speech-to-Text)"
-                >
-                  {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-                </button>
-              )}
+      </div>
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={!inputText.trim()}
-                className="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm shadow-lg shadow-blue-900/40 flex items-center space-x-1.5 transition-all flex-shrink-0"
-              >
-                <span>{t.askButton}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+      {/* 2. Main Search Input Box */}
+      <form onSubmit={handleSearchSubmit} className="max-w-3xl mx-auto">
+        <div className="glass-panel p-2.5 sm:p-3 rounded-2xl border border-slate-300 shadow-md flex flex-col sm:flex-row items-center gap-2">
+          
+          <div className="flex items-center space-x-2 px-3 py-2 w-full flex-1">
+            <Search className="w-5 h-5 text-slate-400 flex-shrink-0" />
+            <input
+              type="text"
+              value={queryInput}
+              onChange={(e) => setQueryInput(e.target.value)}
+              placeholder={t.placeholder || 'e.g. I am an engineering student looking for post-matric scholarship in Maharashtra'}
+              className="w-full bg-transparent text-sm font-semibold text-slate-900 placeholder-slate-400 focus:outline-none"
+            />
           </div>
-        </form>
 
-        {/* Example Queries */}
-        <div className="max-w-3xl mx-auto">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-            {t.tryAsking}
+          <div className="flex items-center space-x-2 w-full sm:w-auto justify-end flex-shrink-0">
+            
+            {/* Voice STT Speech Mic Button */}
+            <button
+              type="button"
+              onClick={handleVoiceInput}
+              className={`p-3 rounded-xl border font-bold text-xs flex items-center justify-center transition-all ${
+                isListening 
+                  ? 'bg-red-500 text-white border-red-600 listening-pulse' 
+                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+              }`}
+              title={t.tryVoice || "Speak Query"}
+            >
+              <Mic className="w-4 h-4 text-amber-700" />
+            </button>
+
+            {/* Submit Action Button */}
+            <button
+              type="submit"
+              className="px-6 py-3 rounded-xl btn-tactile-primary text-white font-bold text-xs shadow-md flex items-center space-x-2 whitespace-nowrap"
+            >
+              <span>{t.findService || 'Find Schemes'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+
+          </div>
+
+        </div>
+      </form>
+
+      {/* 3. Live Example Chips */}
+      <div className="max-w-3xl mx-auto space-y-2">
+        <span className="text-xs font-bold text-slate-500 block text-center uppercase tracking-wider">
+          {t.popularKicker || 'Sample Inquiry Scenarios'}:
+        </span>
+
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {DEMO_SCENARIOS.slice(0, 4).map((demo) => (
+            <button
+              key={demo.id}
+              onClick={() => handleScenarioClick(demo)}
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-amber-50 border border-slate-300 hover:border-amber-400 text-xs font-semibold text-slate-700 hover:text-slate-900 shadow-xs transition-all text-left"
+            >
+              <span className="text-amber-600 mr-1.5 font-bold">💡</span>
+              <span>{demo.title}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. Quick Portal Features Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-4xl mx-auto pt-4">
+        
+        <div 
+          onClick={() => setActiveTab('wizard')}
+          className="glass-card glass-card-hover p-5 rounded-2xl border border-slate-200 cursor-pointer space-y-2"
+        >
+          <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-800">
+            <Scale className="w-5 h-5" />
+          </div>
+          <h3 className="font-extrabold text-sm text-[#0A192F]">{t.wizardCardTitle || 'Eligibility Wizard'}</h3>
+          <p className="text-xs text-slate-600 font-medium leading-relaxed">
+            {t.wizardCardDesc || 'Check which central or state schemes match your age, course, and income profile.'}
           </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <button
-              onClick={() => handleExampleClick(DEMO_SCENARIOS[0].query, DEMO_SCENARIOS[0])}
-              className="px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-200 text-xs font-medium transition-all hover:border-blue-500/50 flex items-center space-x-1"
-            >
-              <span>🎓</span>
-              <span>"I need a scholarship for engineering."</span>
-            </button>
-
-            <button
-              onClick={() => handleExampleClick(DEMO_SCENARIOS[1].query, DEMO_SCENARIOS[1])}
-              className="px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-200 text-xs font-medium transition-all hover:border-blue-500/50 flex items-center space-x-1"
-            >
-              <span>💳</span>
-              <span>"I lost my Aadhaar card."</span>
-            </button>
-
-            <button
-              onClick={() => handleExampleClick(DEMO_SCENARIOS[2].query, DEMO_SCENARIOS[2])}
-              className="px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-200 text-xs font-medium transition-all hover:border-blue-500/50 flex items-center space-x-1"
-            >
-              <span>👵</span>
-              <span>"My mother needs a pension."</span>
-            </button>
-
-            <button
-              onClick={() => handleExampleClick(DEMO_SCENARIOS[3].query, DEMO_SCENARIOS[3])}
-              className="px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-200 text-xs font-medium transition-all hover:border-blue-500/50 flex items-center space-x-1"
-            >
-              <span>📜</span>
-              <span>"I need to apply for a caste certificate."</span>
-            </button>
-
-            <button
-              onClick={() => handleExampleClick("I need financial assistance for education.")}
-              className="px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-200 text-xs font-medium transition-all hover:border-blue-500/50 flex items-center space-x-1"
-            >
-              <span>💡</span>
-              <span>"I need financial assistance for education."</span>
-            </button>
-          </div>
         </div>
 
-        {/* Highlights Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mt-12 text-left">
-          <div className="glass-card p-4 rounded-xl flex items-start space-x-3">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Source Grounded</h4>
-              <p className="text-xs text-slate-400 mt-0.5">Strictly linked to verified government portals & schemes.</p>
-            </div>
+        <div 
+          onClick={() => setActiveTab('grievance')}
+          className="glass-card glass-card-hover p-5 rounded-2xl border border-slate-200 cursor-pointer space-y-2"
+        >
+          <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-800">
+            <FileText className="w-5 h-5" />
           </div>
-          <div className="glass-card p-4 rounded-xl flex items-start space-x-3">
-            <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Multilingual AI</h4>
-              <p className="text-xs text-slate-400 mt-0.5">Full support for English, Hindi, and Marathi languages.</p>
-            </div>
+          <h3 className="font-extrabold text-sm text-[#0A192F]">{t.grievanceCardTitle || 'Grievance Assistant'}</h3>
+          <p className="text-xs text-slate-600 font-medium leading-relaxed">
+            {t.grievanceCardDesc || 'Draft structured petition letters for CPGRAMS if your application status is delayed.'}
+          </p>
+        </div>
+
+        <div 
+          onClick={() => setActiveTab('explore')}
+          className="glass-card glass-card-hover p-5 rounded-2xl border border-slate-200 cursor-pointer space-y-2"
+        >
+          <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-800">
+            <Building2 className="w-5 h-5" />
           </div>
-          <div className="glass-card p-4 rounded-xl flex items-start space-x-3">
-            <CheckCircle2 className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Action-Oriented</h4>
-              <p className="text-xs text-slate-400 mt-0.5">Step-by-step checklist, eligibility check & official links.</p>
-            </div>
-          </div>
+          <h3 className="font-extrabold text-sm text-[#0A192F]">{t.directoryCardTitle || 'Master Scheme Directory'}</h3>
+          <p className="text-xs text-slate-600 font-medium leading-relaxed">
+            {t.directoryCardDesc || 'Browse 47+ indexed schemes with requirements, documents lists, and official links.'}
+          </p>
         </div>
 
       </div>
+
     </section>
   );
 }

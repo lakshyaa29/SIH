@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NagrikMitra AI — Your AI Guide to Government Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F2038;
+    --navy:#16324F;
+    --navy-2:#1E4569;
+    --paper:#F4F6F8;
+    --paper-2:#FFFFFF;
+    --line:#DCE3EA;
+    --teal:#136C53;
+    --teal-bg:#E6F3EE;
+    --saffron:#B5651D;
+    --saffron-bg:#FBEEE1;
+    --red:#B23A3A;
+    --red-bg:#FBEBEB;
+    --muted:#5B6B7C;
+    --token:#0F2038;
+    --radius:14px;
+    --shadow: 0 1px 2px rgba(15,32,56,0.06), 0 8px 24px rgba(15,32,56,0.06);
+    --focus: 0 0 0 3px rgba(30,69,105,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Zilla Slab',Georgia,serif;
+    font-weight:600;
+    margin:0 0 .4em 0;
+    color:var(--ink);
+    letter-spacing:-0.01em;
+  }
+  p{margin:0 0 1em 0;color:var(--muted);}
+  a{color:var(--navy-2);}
+  button{font-family:inherit;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .skip-link{position:absolute;left:-999px;top:0;background:var(--ink);color:#fff;padding:10px 16px;z-index:999;border-radius:0 0 8px 0;}
+  .skip-link:focus{left:0;}
+  button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible{
+    outline:none; box-shadow:var(--focus); border-radius:6px;
+  }
+
+  /* ---------- Layout shell ---------- */
+  #app{min-height:100vh;display:flex;flex-direction:column;}
+  .topbar{
+    background:var(--ink);
+    color:#fff;
+    font-size:12.5px;
+    padding:6px 24px;
+    display:flex; justify-content:space-between; align-items:center;
+    gap:12px; flex-wrap:wrap;
+  }
+  .topbar .flag-strip{display:inline-flex; gap:3px; margin-right:8px;}
+  .flag-strip span{width:14px;height:5px;border-radius:1px;display:inline-block;}
+  .topbar-right{display:flex; align-items:center; gap:14px;}
+  .topbar select{
+    background:transparent; color:#fff; border:1px solid rgba(255,255,255,.35);
+    border-radius:6px; padding:3px 6px; font-size:12px;
+  }
+  .topbar select option{color:#000;}
+
+  nav.mainnav{
+    background:var(--paper-2);
+    border-bottom:1px solid var(--line);
+    position:sticky; top:0; z-index:50;
+    box-shadow:0 1px 0 rgba(15,32,56,0.03);
+  }
+  .nav-inner{
+    max-width:1180px; margin:0 auto; padding:12px 24px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+  .brand{display:flex; align-items:center; gap:10px; cursor:pointer; border:none; background:none; padding:0;}
+  .brand-mark{
+    width:38px;height:38px;border-radius:10px;
+    background:linear-gradient(155deg, var(--navy) 0%, var(--ink) 100%);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Zilla Slab',serif;font-weight:700;font-size:18px;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,0.08);
+  }
+  .brand-text{text-align:left;}
+  .brand-text .name{font-family:'Zilla Slab',serif;font-weight:700;font-size:18px;color:var(--ink);line-height:1.1;}
+  .brand-text .tag{font-size:11px;color:var(--muted);letter-spacing:.02em;}
+  .navlinks{display:flex;gap:4px;flex-wrap:wrap;}
+  .navlinks button{
+    background:none;border:none;padding:8px 12px;border-radius:8px;font-size:14px;font-weight:500;color:var(--navy);cursor:pointer;
+  }
+  .navlinks button:hover{background:var(--paper);}
+  .navlinks button.active{background:var(--ink);color:#fff;}
+
+  main{flex:1;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+  .section{padding:52px 0;}
+  .section.tight{padding:32px 0;}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;justify-content:center;
+    padding:11px 20px;border-radius:10px;font-weight:600;font-size:14.5px;
+    border:1px solid transparent;cursor:pointer;text-decoration:none;transition:transform .05s ease;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{background:var(--ink);color:#fff;}
+  .btn-primary:hover{background:var(--navy);}
+  .btn-outline{background:#fff;color:var(--ink);border-color:var(--line);}
+  .btn-outline:hover{border-color:var(--navy-2);}
+  .btn-saffron{background:var(--saffron);color:#fff;}
+  .btn-saffron:hover{filter:brightness(1.05);}
+  .btn-ghost{background:none;color:var(--navy-2);padding:8px 10px;}
+  .btn-sm{padding:7px 12px;font-size:13px;border-radius:8px;}
+  .btn[disabled]{opacity:.5;cursor:not-allowed;}
+  .btn-block{width:100%;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:
+      radial-gradient(1100px 420px at 85% -10%, rgba(181,101,29,0.10), transparent 60%),
+      radial-gradient(900px 400px at -10% 0%, rgba(19,108,83,0.08), transparent 60%),
+      linear-gradient(180deg, #0F2038 0%, #16324F 100%);
+    color:#fff;
+    padding:64px 0 56px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;inset:0;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size:42px 42px;
+    mask-image:radial-gradient(700px 300px at 30% 20%, black, transparent);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;max-width:820px;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18);
+    padding:5px 12px;border-radius:999px;font-size:12.5px;font-weight:600;letter-spacing:.03em;color:#F1E4D4;margin-bottom:18px;
+  }
+  .hero h1{color:#fff;font-size:clamp(30px,4.4vw,46px);line-height:1.08;max-width:16ch;}
+  .hero .sub{color:#C9D5E0;font-size:17px;max-width:56ch;margin-top:14px;}
+  .ask-box{
+    margin-top:30px;background:#fff;border-radius:16px;padding:8px;box-shadow:0 20px 50px rgba(0,0,0,.35);
+    display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;
+  }
+  .ask-box textarea{
+    flex:1;min-width:220px;border:none;outline:none;resize:none;padding:14px 14px;font-size:15.5px;font-family:inherit;color:var(--ink);min-height:52px;max-height:140px;
+  }
+  .ask-box .btn{margin:6px;white-space:nowrap;}
+  .hero-hint{margin-top:12px;font-size:13px;color:#9FB2C4;}
+  .hero-hint button{background:none;border:none;color:#F1E4D4;text-decoration:underline;cursor:pointer;font-size:13px;padding:0;}
+  .hero-stats{display:flex;gap:28px;margin-top:34px;flex-wrap:wrap;}
+  .hero-stats .stat b{display:block;font-family:'Zilla Slab',serif;font-size:22px;color:#fff;}
+  .hero-stats .stat span{font-size:12px;color:#9FB2C4;}
+
+  /* Token strip - signature motif */
+  .token-chip{
+    display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.3);
+    border-radius:10px;padding:8px 12px;font-size:12.5px;color:#E9EEF3;margin-top:22px;
+  }
+  .token-chip b{font-family:'IBM Plex Mono',monospace;color:#F1E4D4;}
+
+  /* ---------- Cards / grids ---------- */
+  .grid{display:grid;gap:18px;}
+  .grid-3{grid-template-columns:repeat(3,1fr);}
+  .grid-4{grid-template-columns:repeat(4,1fr);}
+  .grid-2{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:920px){.grid-3,.grid-4{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:600px){.grid-3,.grid-4,.grid-2{grid-template-columns:1fr;}}
+
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);
+  }
+  .card h3{font-size:17px;}
+  .card .desc{font-size:13.5px;}
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px;
+  }
+  .pill-teal{background:var(--teal-bg);color:var(--teal);}
+  .pill-saffron{background:var(--saffron-bg);color:var(--saffron);}
+  .pill-red{background:var(--red-bg);color:var(--red);}
+  .pill-muted{background:var(--paper);color:var(--muted);border:1px solid var(--line);}
+
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
+  .section-head .kicker{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--saffron);margin-bottom:6px;display:block;}
+  .section-head h2{font-size:26px;}
+
+  .service-card{cursor:pointer;transition:border-color .12s ease, transform .12s ease;}
+  .service-card:hover{border-color:var(--navy-2);transform:translateY(-2px);}
+  .service-card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
+  .service-card .cat{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600;}
+
+  /* how it works */
+  .steps-row{display:flex;gap:0;counter-reset:step;}
+  .step-item{flex:1;position:relative;padding:0 16px 0 0;}
+  .step-item .num{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--saffron);font-weight:700;margin-bottom:8px;display:block;
+  }
+  .step-item h4{font-size:15.5px;margin-bottom:6px;}
+  .step-item p{font-size:13.5px;}
+  @media(max-width:800px){.steps-row{flex-direction:column;gap:20px;}}
+
+  footer{background:var(--ink);color:#B9C6D3;padding:40px 0 24px;margin-top:40px;font-size:13.5px;}
+  footer h4{color:#fff;font-size:14px;}
+  footer a{color:#B9C6D3;text-decoration:none;}
+  footer a:hover{color:#fff;}
+  .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:24px;}
+  @media(max-width:800px){.foot-grid{grid-template-columns:1fr 1fr;}}
+  .disclaimer{
+    margin-top:28px;padding:14px 16px;border:1px solid rgba(255,255,255,.15);border-radius:10px;font-size:12.5px;color:#9FB2C4;background:rgba(255,255,255,.03);
+  }
+
+  /* ---------- Assistant ---------- */
+  .assistant-shell{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start;}
+  @media(max-width:900px){.assistant-shell{grid-template-columns:1fr;}}
+  .chat-panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-height:420px;display:flex;flex-direction:column;}
+  .chat-log{padding:22px;flex:1;display:flex;flex-direction:column;gap:14px;max-height:560px;overflow-y:auto;}
+  .msg{max-width:80%;padding:12px 15px;border-radius:12px;font-size:14.5px;line-height:1.5;}
+  .msg.ai{background:var(--paper);color:var(--ink);align-self:flex-start;border:1px solid var(--line);}
+  .msg.user{background:var(--ink);color:#fff;align-self:flex-end;}
+  .msg.system{align-self:center;background:var(--saffron-bg);color:var(--saffron);font-size:12.5px;padding:6px 12px;border-radius:999px;}
+  .typing{align-self:flex-start;display:flex;gap:5px;padding:12px 15px;}
+  .typing span{width:6px;height:6px;border-radius:50%;background:var(--muted);opacity:.5;animation:blink 1.1s infinite ease-in-out;}
+  .typing span:nth-child(2){animation-delay:.15s;} .typing span:nth-child(3){animation-delay:.3s;}
+  @keyframes blink{0%,80%,100%{opacity:.25;}40%{opacity:.9;}}
+
+  .qopts{display:flex;flex-wrap:wrap;gap:8px;align-self:flex-start;max-width:90%;}
+  .qopts button{
+    background:#fff;border:1.5px solid var(--navy-2);color:var(--navy-2);padding:9px 14px;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;
+  }
+  .qopts button:hover{background:var(--navy-2);color:#fff;}
+
+  .chat-input-row{border-top:1px solid var(--line);padding:14px 18px;display:flex;gap:10px;}
+  .chat-input-row input{
+    flex:1;border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:14.5px;font-family:inherit;outline:none;
+  }
+  .chat-input-row input:focus{border-color:var(--navy-2);}
+
+  .side-panel .card{margin-bottom:16px;}
+  .intent-badge{display:flex;align-items:center;gap:10px;}
+  .intent-badge .dot{width:9px;height:9px;border-radius:50%;background:var(--teal);}
+  .progress-track{height:6px;background:var(--paper);border-radius:99px;overflow:hidden;margin-top:8px;}
+  .progress-fill{height:100%;background:var(--teal);border-radius:99px;transition:width .25s ease;}
+
+  .demo-list button{
+    display:block;width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--ink);margin-bottom:8px;cursor:pointer;
+  }
+  .demo-list button:hover{border-color:var(--navy-2);}
+
+  /* ---------- Result page ---------- */
+  .result-header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:22px;}
+  .match-ring{
+    width:86px;height:86px;border-radius:50%;
+    background:conic-gradient(var(--teal) calc(var(--pct,80)*1%), var(--line) 0);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .match-ring .inner{width:66px;height:66px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .match-ring .inner b{font-family:'Zilla Slab',serif;font-size:17px;}
+  .match-ring .inner span{font-size:9.5px;color:var(--muted);}
+
+  .checklist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;}
+  .checklist li{display:flex;gap:10px;font-size:14px;color:var(--ink);align-items:flex-start;}
+  .checklist li .tick{color:var(--teal);font-weight:700;flex-shrink:0;}
+  .doclist{display:flex;flex-wrap:wrap;gap:8px;}
+  .doclist span{background:var(--paper);border:1px solid var(--line);padding:6px 12px;border-radius:8px;font-size:13px;}
+
+  .actionplan{list-style:none;margin:0;padding:0;counter-reset:ap;}
+  .actionplan li{
+    display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);
+  }
+  .actionplan li:last-child{border-bottom:none;}
+  .actionplan .apnum{
+    width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12.5px;flex-shrink:0;
+  }
+  .actionplan h4{font-size:14.5px;margin-bottom:3px;}
+  .actionplan p{font-size:13px;margin:0;}
+
+  .why-box{background:var(--teal-bg);border:1px solid #cfe6dc;border-radius:12px;padding:16px 18px;}
+  .why-box h4{color:var(--teal);font-size:14px;margin-bottom:8px;}
+
+  .source-box{display:flex;align-items:center;justify-content:space-between;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;flex-wrap:wrap;gap:10px;}
+
+  /* ---------- Tables ---------- */
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700;}
+  tr:last-child td{border-bottom:none;}
+
+  /* forms */
+  label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:5px;}
+  input[type=text],input[type=search],input[type=date],select,textarea.field{
+    width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:14px;font-family:inherit;outline:none;background:#fff;
+  }
+  input[type=text]:focus,select:focus,textarea.field:focus{border-color:var(--navy-2);}
+  .field-row{margin-bottom:14px;}
+
+  .empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+  .empty-state .icon{font-size:34px;margin-bottom:10px;}
+
+  .badge-inline{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;}
+  .kbd{font-family:'IBM Plex Mono',monospace;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:11px;}
+
+  .tabbar{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:20px;flex-wrap:wrap;}
+  .tabbar button{background:none;border:none;padding:10px 4px;margin-right:18px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;}
+  .tabbar button.active{color:var(--ink);border-bottom-color:var(--saffron);}
+
+  .qa-item{border-bottom:1px solid var(--line);padding:16px 0;}
+  .qa-item h4{font-size:15px;color:var(--navy);margin-bottom:6px;}
+  .qa-item p{font-size:14px;margin:0;}
+
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:#c7d1da;border-radius:99px;}
+
+  @media(prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<div id="app"></div>
+
+<script>
+/* =========================================================================
+   NAGRIKMITRA AI — PROTOTYPE
+   Single-file client-side implementation of the RAG-style flow described
+   in the project brief:
+
+   User Question -> Intent Detection -> Follow-up Questions -> User Profile
+   -> retrieveRelevantServices() [Government Service Retrieval]
+   -> generateGroundedResponse() [Grounded Answer + Confidence]
+   -> Official Sources -> Personalized Action Plan
+
+   NOTE ON ARCHITECTURE (read this first):
+   This prototype runs entirely in the browser (no Node/Express/SQLite
+   server) so it is 100% clickable the moment you open this file — no
+   npm install, no backend, no API key required. The functions below
+   are written as the same abstractions a real backend would expose
+   (retrieveRelevantServices, generateGroundedResponse, an "API" object
+   that mimics REST calls) so this logic can be lifted almost as-is into
+   an Express + SQLite backend later. See README.md for the upgrade path.
+
+   All "AI" behaviour here is a transparent, rule-based demo/mock layer —
+   never a live LLM or a live government API. This is stated on-screen
+   wherever relevant, per the brief's anti-hallucination requirements.
+   ========================================================================= */
+
+/* ---------------------------- 1. DATA LAYER ---------------------------- */
+
+// Government service / scheme records. Official URLs point to real,
+// well-known government domains. Where a scheme is state-administered,
+// "states" is ['All'] and the citizen is told to confirm state-specific
+// steps on the linked portal.
+const SERVICES = [
+  {
+    id:'nsp-scholarship', service_name:'National Scholarship Portal (NSP)', category:'Education',
+    description:'Single-window portal that hosts hundreds of central and state government scholarships for school, undergraduate, postgraduate and PhD students.',
+    states:['All'],
+    eligibility:['Enrolled student (school/UG/PG/PhD)','Meets the specific scheme\'s income/category criteria on NSP','Valid Aadhaar-linked bank account'],
+    required_documents:['Aadhaar card','Bank passbook (Aadhaar-linked)','Latest mark sheet / admission proof','Income certificate (for income-based schemes)','Category certificate (if applicable)'],
+    application_steps:['Register on scholarships.gov.in as a fresh applicant','Fill personal, academic and bank details','Select the scholarship scheme(s) you are eligible for','Upload required documents','Submit and note your Application ID for tracking'],
+    official_url:'https://scholarships.gov.in', source_name:'Ministry of Education — National Scholarship Portal',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['scholarship','student','education','study','college','fee','tuition','financial help education','stipend']
+  },
+  {
+    id:'pm-kisan', service_name:'PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)', category:'Farmer Services',
+    description:'Direct income support of ₹6,000/year to eligible landholding farmer families, paid in three instalments straight to bank accounts.',
+    states:['All'],
+    eligibility:['Landholding farmer family (as per state land records)','Excludes certain categories: government employees, income-tax payers, professionals — check full exclusion list on the portal'],
+    required_documents:['Aadhaar card','Land ownership records','Bank account details','Mobile number linked to Aadhaar'],
+    application_steps:['Visit the PM-KISAN portal or your local Common Service Centre (CSC)','Complete "New Farmer Registration" with land and bank details','Get land records verified by the local revenue/agriculture officer','Track status using your Aadhaar number on the portal'],
+    official_url:'https://pmkisan.gov.in', source_name:'Ministry of Agriculture & Farmers Welfare — PM-KISAN',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['farmer','farming','crop','kisan','agriculture','land','cultivator','income support farmer']
+  },
+  {
+    id:'pmjay', service_name:'Ayushman Bharat — PM-JAY', category:'Healthcare',
+    description:'Health insurance cover of up to ₹5 lakh per family per year for secondary and tertiary hospitalisation at empanelled hospitals.',
+    states:['All'],
+    eligibility:['Family listed as eligible under SECC deprivation criteria / state extension','No cap on family size or age under the scheme'],
+    required_documents:['Aadhaar card','Ration card / family ID','Any state-notified eligibility proof'],
+    application_steps:['Check eligibility on the PM-JAY portal or the "Am I Eligible" tool','Visit the nearest empanelled hospital\'s Ayushman Bharat help desk with ID proof','Get your Ayushman card (PVC card) generated','Use the card for cashless treatment at empanelled hospitals'],
+    official_url:'https://pmjay.gov.in', source_name:'National Health Authority — PM-JAY',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['health','hospital','medical','treatment','insurance','ayushman','surgery cost','healthcare assistance']
+  },
+  {
+    id:'uidai-aadhaar', service_name:'Aadhaar Enrolment & Update Services', category:'Aadhaar',
+    description:'Enrol for a new Aadhaar number or update demographic/biometric details through UIDAI\'s official channels.',
+    states:['All'],
+    eligibility:['Resident of India (any age; enrolment for children also available)'],
+    required_documents:['Proof of Identity (POI)','Proof of Address (POA)','Proof of Date of Birth (for first enrolment)'],
+    application_steps:['Book an appointment at the nearest Aadhaar Enrolment/Update Centre via the UIDAI portal','Carry original POI/POA documents','Complete biometric capture (for new enrolment)','Download the e-Aadhaar / order a PVC card once processed'],
+    official_url:'https://uidai.gov.in', source_name:'Unique Identification Authority of India (UIDAI)',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['aadhaar','aadhar','uid','identity proof','biometric update']
+  },
+  {
+    id:'pan-services', service_name:'PAN Card Services (Instant e-PAN)', category:'Government Certificates',
+    description:'Apply for a new Permanent Account Number (PAN) or get a free instant e-PAN using your Aadhaar, via the Income Tax Department.',
+    states:['All'],
+    eligibility:['Valid Aadhaar with updated mobile number (for instant e-PAN)','Any individual/entity not already holding a PAN'],
+    required_documents:['Aadhaar card','Aadhaar-linked mobile number'],
+    application_steps:['Go to the Income Tax e-filing portal\'s "Instant e-PAN" service','Enter Aadhaar number and verify via OTP','e-PAN is generated in PDF format within minutes for most applicants','Apply through NSDL/UTIITSL channels instead if you need a physical PAN card'],
+    official_url:'https://www.incometax.gov.in/iec/foportal/', source_name:'Income Tax Department, Government of India',
+    last_verified:'2026-06-01', confidence:'Medium',
+    keywords:['pan card','pan','income tax id','permanent account number']
+  },
+  {
+    id:'driving-licence', service_name:'Driving Licence Services (Sarathi / Parivahan)', category:'Driving Licence',
+    description:'Apply for a Learner\'s Licence, Permanent Driving Licence, or renewal through the Ministry of Road Transport & Highways portal.',
+    states:['All'],
+    eligibility:['Minimum age as per vehicle class (16 for gearless two-wheelers with guardian consent, 18 for most other classes)','Must pass the learner\'s test and, later, the driving test'],
+    required_documents:['Aadhaar card','Address proof','Age proof','Passport-size photograph','Medical certificate (for transport vehicle licences)'],
+    application_steps:['Apply online for Learner\'s Licence on the Parivahan/Sarathi portal','Pass the online learner\'s test','Book a slot for the driving test at the RTO after the mandatory gap period','Pass the driving test to receive the Permanent Driving Licence'],
+    official_url:'https://parivahan.gov.in', source_name:'Ministry of Road Transport & Highways — Parivahan Sewa',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['driving licence','driving license','learner licence','vehicle','dl renewal','rto']
+  },
+  {
+    id:'ration-card', service_name:'Ration Card / National Food Security Act (NFSA)', category:'Ration Card',
+    description:'Apply for a ration card to access subsidised foodgrain under the Public Distribution System (PDS).',
+    states:['All'],
+    eligibility:['Household meets state-specific income/priority criteria under NFSA','Not already holding a ration card elsewhere'],
+    required_documents:['Aadhaar card of all family members','Address proof','Income certificate (for priority category)','Passport-size photographs'],
+    application_steps:['Check your state\'s food & civil supplies portal (linked from NFSA)','Submit the ration card application online or at the local circle office','Field verification is conducted by the department','Collect the ration card / check "One Nation One Ration Card" portability'],
+    official_url:'https://nfsa.gov.in', source_name:'Department of Food & Public Distribution',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['ration card','ration','food security','pds','subsidised food','one nation one ration card']
+  },
+  {
+    id:'eshram', service_name:'e-Shram — Unorganised Workers Registration', category:'Employment',
+    description:'National database for unorganised sector workers, giving access to social security schemes and a Universal Account Number (UAN).',
+    states:['All'],
+    eligibility:['Unorganised sector worker aged 16–59','Not a member of EPFO/ESIC or an income-tax payee'],
+    required_documents:['Aadhaar card (Aadhaar-linked mobile for OTP)','Bank account details'],
+    application_steps:['Register on the e-Shram portal using Aadhaar-linked mobile OTP','Fill occupation, skill and bank details','Download your e-Shram card with a 12-digit UAN','Use the UAN to check eligibility for linked welfare schemes'],
+    official_url:'https://eshram.gov.in', source_name:'Ministry of Labour & Employment — e-Shram',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['job','employment','worker','unorganised','shram','daily wage worker','gig worker','labour card']
+  },
+  {
+    id:'epfo-pension', service_name:'EPFO — Employees\' Pension Scheme', category:'Pension',
+    description:'Pension and provident fund benefits for salaried employees contributing through the Employees\' Provident Fund Organisation.',
+    states:['All'],
+    eligibility:['Salaried employee with EPF contributions for the qualifying service period','10+ years of eligible service for a monthly pension on retirement'],
+    required_documents:['UAN (Universal Account Number)','Aadhaar card','Bank account linked to UAN','Form 10D (for pension claim)'],
+    application_steps:['Activate your UAN on the EPFO Member e-Sewa portal','Link Aadhaar and bank account to your UAN (KYC)','On retirement/eligibility, file the pension claim (Form 10D) online','Track claim status on the EPFO portal'],
+    official_url:'https://www.epfindia.gov.in', source_name:'Employees\' Provident Fund Organisation (EPFO)',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['pension','retire','provident fund','epf','uan','employee pension']
+  },
+  {
+    id:'apy-pension', service_name:'Atal Pension Yojana (APY)', category:'Pension',
+    description:'Guaranteed minimum pension scheme (₹1,000–₹5,000/month) for workers in the unorganised sector, regulated by PFRDA.',
+    states:['All'],
+    eligibility:['Age 18–40 years','Valid bank/post office savings account','Primarily aimed at unorganised sector workers not covered by any statutory social security scheme'],
+    required_documents:['Aadhaar card','Bank/post office savings account','Mobile number'],
+    application_steps:['Approach your bank branch or post office where you hold a savings account','Fill the APY registration form and choose a monthly pension slab','Ensure auto-debit is set up for monthly contributions','Track your account via the NPS/APY portal linked to your bank'],
+    official_url:'https://www.pfrda.org.in', source_name:'Pension Fund Regulatory and Development Authority (PFRDA) — regulator; enrolment via banks/post offices',
+    last_verified:'2026-06-01', confidence:'Medium',
+    keywords:['pension','atal pension yojana','apy','old age income','retirement savings unorganised']
+  },
+  {
+    id:'pmay', service_name:'Pradhan Mantri Awas Yojana (Urban)', category:'Housing',
+    description:'Housing scheme aimed at providing affordable housing / interest subsidy on home loans for eligible urban households.',
+    states:['All'],
+    eligibility:['Household without a pucca house anywhere in India','Falls within the scheme\'s defined income category (EWS/LIG/MIG as applicable)'],
+    required_documents:['Aadhaar card','Income certificate','Proof of no existing pucca house (self-declaration)','Bank account details'],
+    application_steps:['Check eligibility on the PMAY(Urban) portal','Apply online or through the Common Service Centre (CSC)','Application is verified by the Urban Local Body','Track sanction and subsidy status on the portal'],
+    official_url:'https://pmaymis.gov.in', source_name:'Ministry of Housing & Urban Affairs — PMAY (Urban)',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['house','housing','home loan','awas','affordable housing','pucca house']
+  },
+  {
+    id:'wcd-schemes', service_name:'Women & Child Welfare Schemes (Ministry of WCD)', category:'Women & Child Welfare',
+    description:'Umbrella access point for schemes supporting maternal health, child nutrition, and girl-child welfare (e.g. Anganwadi services, Beti Bachao Beti Padhao).',
+    states:['All'],
+    eligibility:['Varies by scheme — typically pregnant/lactating mothers, children under 6, or girl children, depending on the specific programme'],
+    required_documents:['Aadhaar card','Birth certificate (for child-linked schemes)','Bank account details','Address proof'],
+    application_steps:['Identify the specific scheme relevant to your need via the Ministry of WCD website','Register at your local Anganwadi Centre or the relevant scheme portal','Submit required documents for verification','Track benefits through the scheme\'s tracking portal, where available'],
+    official_url:'https://wcd.nic.in', source_name:'Ministry of Women & Child Development',
+    last_verified:'2026-06-01', confidence:'Medium',
+    keywords:['woman','women','girl child','daughter','maternity','anganwadi','child welfare','nutrition scheme']
+  },
+  {
+    id:'nsap-pension', service_name:'National Social Assistance Programme (Senior Citizen Pension)', category:'Senior Citizen Services',
+    description:'Monthly social assistance pension for elderly persons, widows and persons with disabilities from BPL households, run by states under NSAP norms.',
+    states:['All'],
+    eligibility:['Age 60+ (varies slightly by state) for the old-age component','Belongs to a BPL / state-defined eligible household'],
+    required_documents:['Aadhaar card','Age proof','BPL/income certificate','Bank/post office account details'],
+    application_steps:['Check your state\'s specific NSAP/old-age pension application process (linked from the NSAP portal)','Apply at the local Panchayat/Municipal office or via the state portal','Get the application verified by the local revenue officer','Receive monthly pension via direct bank transfer'],
+    official_url:'https://nsap.nic.in', source_name:'Ministry of Rural Development — NSAP',
+    last_verified:'2026-06-01', confidence:'Medium',
+    keywords:['senior citizen','elderly','old age pension','widow pension','bpl pension']
+  },
+  {
+    id:'udid-disability', service_name:'Unique Disability ID (UDID)', category:'Disability Services',
+    description:'National portal to apply for a Unique Disability ID card and disability certificate, used to access disability-linked benefits and reservations.',
+    states:['All'],
+    eligibility:['Person with a benchmark disability as defined under the RPwD Act, 2016'],
+    required_documents:['Aadhaar card','Recent photograph','Medical assessment / disability certificate from a notified medical authority'],
+    application_steps:['Register on the UDID portal with personal details','Book/attend a medical assessment camp or hospital for certification','Upload assessment details on the portal','Download the UDID card once approved'],
+    official_url:'https://www.swavlambancard.gov.in', source_name:'Department of Empowerment of Persons with Disabilities',
+    last_verified:'2026-06-01', confidence:'Medium',
+    keywords:['disability','disabled','divyang','udid','disability certificate','disability id']
+  },
+  {
+    id:'udyam', service_name:'Udyam Registration (MSME)', category:'Business Registration',
+    description:'Free, paperless registration for Micro, Small and Medium Enterprises, unlocking government scheme benefits, subsidies and priority-sector lending.',
+    states:['All'],
+    eligibility:['Business meets MSME investment and turnover thresholds (Micro/Small/Medium as defined by the Ministry of MSME)','Aadhaar of the proprietor/authorised signatory'],
+    required_documents:['Aadhaar card','PAN of business/proprietor','Business address and bank details'],
+    application_steps:['Visit the Udyam Registration portal','Enter Aadhaar and PAN — most fields are auto-fetched','Fill business activity, investment and turnover details','Submit to receive the Udyam Registration Certificate instantly'],
+    official_url:'https://udyamregistration.gov.in', source_name:'Ministry of Micro, Small & Medium Enterprises',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['business','startup','udyam','msme','company registration','small business registration']
+  },
+  {
+    id:'cpgrams', service_name:'CPGRAMS — Centralised Public Grievance Redress', category:'Grievance',
+    description:'Online platform to lodge, track and escalate grievances against any central or state government department.',
+    states:['All'],
+    eligibility:['Any citizen with a grievance against a government department/service delivery'],
+    required_documents:['Details of the department/scheme concerned','Any reference or application ID related to the grievance','Aadhaar (optional, for registration)'],
+    application_steps:['Register/login on the CPGRAMS portal','Select the relevant Ministry/Department/State','Describe the grievance clearly and attach supporting documents','Track status using the registration number; escalate if unresolved within the stated timeline'],
+    official_url:'https://pgportal.gov.in', source_name:'Department of Administrative Reforms & Public Grievances (DARPG)',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['complaint','grievance','pending','delay','not responding','rejected application','escalate']
+  },
+  {
+    id:'digilocker', service_name:'DigiLocker', category:'Government Certificates',
+    description:'Secure cloud-based platform to store, access and digitally share government-issued documents and certificates.',
+    states:['All'],
+    eligibility:['Any Indian citizen with a valid mobile number/Aadhaar'],
+    required_documents:['Mobile number','Aadhaar (for linking with issued documents)'],
+    application_steps:['Sign up on DigiLocker with your mobile number','Link Aadhaar to auto-fetch eligible documents','Pull documents (Aadhaar, PAN, driving licence, marksheets, etc.) from linked issuers','Share digitally-signed documents wherever accepted'],
+    official_url:'https://www.digilocker.gov.in', source_name:'Ministry of Electronics & IT — DigiLocker',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['certificate','digilocker','digital documents','store documents','birth certificate','marksheet storage']
+  },
+  {
+    id:'umang', service_name:'UMANG (Unified Mobile Application for New-age Governance)', category:'Other',
+    description:'Single mobile/web app giving access to hundreds of central and state government services in one place.',
+    states:['All'],
+    eligibility:['Any citizen'],
+    required_documents:['Mobile number for registration'],
+    application_steps:['Download the UMANG app or visit the web portal','Register using your mobile number','Search for the specific department/service you need','Complete the transaction within the relevant service module'],
+    official_url:'https://web.umang.gov.in', source_name:'Ministry of Electronics & IT — UMANG',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['umang','multiple government services app','one app government']
+  },
+  {
+    id:'myscheme', service_name:'MyScheme', category:'Other',
+    description:'Government scheme-discovery portal that lets citizens search and filter schemes they may be eligible for, across ministries and states.',
+    states:['All'],
+    eligibility:['Any citizen exploring scheme eligibility'],
+    required_documents:['None required to search; individual schemes will list their own document requirements'],
+    application_steps:['Visit myscheme.gov.in','Search by keyword or use eligibility filters (age, income, state, etc.)','Review shortlisted schemes\' eligibility and documents','Follow the "Apply" link to the scheme\'s own official portal'],
+    official_url:'https://www.myscheme.gov.in', source_name:'National Government Services Portal — MyScheme',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['myscheme','find scheme','which scheme applies to me']
+  },
+  {
+    id:'india-gov', service_name:'India.gov.in — National Portal of India', category:'Other',
+    description:'The umbrella national portal indexing government websites, services and information across ministries and states.',
+    states:['All'],
+    eligibility:['Any citizen'],
+    required_documents:['None'],
+    application_steps:['Visit india.gov.in','Use the directory to locate the correct department/ministry website','Follow through to the department\'s own official service page'],
+    official_url:'https://www.india.gov.in', source_name:'National Informatics Centre — National Portal of India',
+    last_verified:'2026-06-01', confidence:'High',
+    keywords:['india.gov.in','national portal','government directory']
+  }
+];
+
+// Official multi-service platforms shown in "Official Platforms" section.
+const PLATFORMS = [
+  {name:'UMANG', purpose:'All-in-one government services app', description:'Access hundreds of central and state government services from one mobile/web app — bills, certificates, welfare schemes and more.', url:'https://web.umang.gov.in', source:'Ministry of Electronics & IT'},
+  {name:'DigiLocker', purpose:'Digital document wallet', description:'Store and digitally share Aadhaar, PAN, driving licence, marksheets and other government-issued documents securely.', url:'https://www.digilocker.gov.in', source:'Ministry of Electronics & IT'},
+  {name:'MyScheme', purpose:'Scheme discovery & eligibility search', description:'Search and filter government schemes you may be eligible for, across ministries, states and categories.', url:'https://www.myscheme.gov.in', source:'National Government Services Portal'},
+  {name:'India.gov.in', purpose:'National government directory', description:'The umbrella national portal linking to every ministry, department and state government website.', url:'https://www.india.gov.in', source:'National Informatics Centre'},
+  {name:'CPGRAMS', purpose:'Grievance redress', description:'Lodge, track and escalate a grievance against any central or state government department.', url:'https://pgportal.gov.in', source:'DARPG'}
+];
+
+// Intent keyword map used by the rule-based intent detector.
+const INTENTS = [
+  {key:'Education', label:'Education / Scholarship', keywords:['scholarship','student','education','study','college','tuition','fee','financial help education','stipend','school']},
+  {key:'Healthcare', label:'Healthcare', keywords:['health','hospital','medical','treatment','insurance','ayushman','surgery','sick','illness']},
+  {key:'Pension', label:'Pension', keywords:['pension','retire','retirement','provident fund','epf','uan','old age income']},
+  {key:'Aadhaar', label:'Aadhaar', keywords:['aadhaar','aadhar','uid number','biometric update']},
+  {key:'Government Certificates', label:'PAN / Certificates', keywords:['pan card','pan number','digilocker','certificate','birth certificate','income certificate']},
+  {key:'Driving Licence', label:'Driving Licence', keywords:['driving licence','driving license','learner licence','vehicle licence',' rto ','dl renewal']},
+  {key:'Ration Card', label:'Ration Card', keywords:['ration card','ration','food security','pds','subsidised food']},
+  {key:'Employment', label:'Employment', keywords:['job','employment','worker','unorganised','shram','daily wage','gig worker','labour card']},
+  {key:'Housing', label:'Housing', keywords:['house','housing','home loan','awas','pucca house']},
+  {key:'Farmer Services', label:'Farmer Services', keywords:['farmer','farming','crop','kisan','agriculture','cultivator','land holding']},
+  {key:'Women & Child Welfare', label:'Women & Child Welfare', keywords:['woman','women','girl child','daughter','maternity','anganwadi','pregnant']},
+  {key:'Senior Citizen Services', label:'Senior Citizen Services', keywords:['senior citizen','elderly','old age pension','widow']},
+  {key:'Disability Services', label:'Disability Services', keywords:['disability','disabled','divyang','udid']},
+  {key:'Business Registration', label:'Business Registration', keywords:['business','startup','udyam','msme','company registration','shop registration']},
+  {key:'Grievance', label:'Grievance', keywords:['complaint','grievance','pending','delayed','delay','not responding','rejected','stuck','no response']}
+];
+
+// Follow-up question sets per intent (minimum-necessary-questions principle).
+const QUESTIONS = {
+  'Education':[
+    {id:'state', label:'Which state are you in?', type:'select', options:['Maharashtra','Delhi','Uttar Pradesh','Karnataka','Tamil Nadu','West Bengal','Other']},
+    {id:'level', label:'What is your current education level?', type:'select', options:['School','Undergraduate','Postgraduate','PhD','Other']},
+    {id:'income', label:'What is your approximate annual family income?', type:'select', options:['Below ₹1 lakh','₹1–2.5 lakh','₹2.5–5 lakh','Above ₹5 lakh']}
+  ],
+  'Pension':[
+    {id:'age', label:'What is your age?', type:'select', options:['Below 18','18–40','41–59','60 and above']},
+    {id:'state', label:'Which state are you in?', type:'select', options:['Maharashtra','Delhi','Uttar Pradesh','Karnataka','Tamil Nadu','West Bengal','Other']},
+    {id:'employment', label:'What is your employment status?', type:'select', options:['Salaried (formal sector)','Unorganised sector worker','Self-employed','Not employed']},
+    {id:'existing', label:'Do you already receive any pension?', type:'select', options:['Yes','No']}
+  ],
+  'Farmer Services':[
+    {id:'state', label:'Which state are you in?', type:'select', options:['Maharashtra','Punjab','Uttar Pradesh','Karnataka','Madhya Pradesh','Other']},
+    {id:'land', label:'Do you own agricultural land?', type:'select', options:['Yes, in my name','Yes, family-owned','No, I am a tenant farmer','No land']},
+    {id:'need', label:'What kind of assistance do you need?', type:'select', options:['Income support','Crop insurance / loss','Farm equipment / inputs','Not sure']}
+  ],
+  'Healthcare':[
+    {id:'state', label:'Which state are you in?', type:'select', options:['Maharashtra','Delhi','Uttar Pradesh','Karnataka','Tamil Nadu','West Bengal','Other']},
+    {id:'assist', label:'What type of assistance do you need?', type:'select', options:['Hospitalisation cost support','Health insurance card','Routine treatment access','Not sure']},
+    {id:'coverage', label:'Do you have any existing government health coverage?', type:'select', options:['Yes','No','Not sure']}
+  ],
+  'Grievance':[
+    {id:'dept', label:'Which department or scheme is this about?', type:'select', options:['Scholarship / Education','Pension','Aadhaar/PAN','Ration Card','Healthcare','Other']},
+    {id:'duration', label:'How long has it been pending?', type:'select', options:['Less than 15 days','15–30 days','More than 30 days']}
+  ],
+  '__default':[
+    {id:'state', label:'Which state are you in?', type:'select', options:['Maharashtra','Delhi','Uttar Pradesh','Karnataka','Tamil Nadu','West Bengal','Other']}
+  ]
+};
+
+const DEMO_QUERIES = [
+  "I am a student from Maharashtra and I need financial help for my education.",
+  "I want to apply for a pension.",
+  "I need to complain about a delayed government service.",
+  "I am a farmer looking for government assistance.",
+  "I need to store my government documents digitally."
+];
+
+const JURY_QA = [
+  {q:'What problem are you solving?', a:'Citizens often don\'t know which government scheme applies to them, whether they\'re eligible, what documents they need, or where to apply. NagrikMitra AI turns a plain-language problem statement into a specific, verified next step.'},
+  {q:'Why is existing government-service discovery difficult?', a:'Schemes are spread across hundreds of ministry, state and district websites, each with different terminology, eligibility rules and forms. A citizen has to already know a scheme\'s name to find it.'},
+  {q:'How does AI help?', a:'A conversational layer interprets an everyday problem statement, detects intent, asks only the minimum necessary follow-up questions, and maps the citizen\'s profile to the right service — instead of the citizen searching blind.'},
+  {q:'How does intent detection work?', a:'The prototype uses a transparent keyword/rule-based classifier over a fixed set of service categories (Education, Pension, Farmer Services, etc). This is intentionally simple and inspectable; a production version could add an LLM-based classifier behind the same interface.'},
+  {q:'Why do you need RAG?', a:'To ground every AI answer in a real, curated database of services rather than letting a model invent scheme names, eligibility or URLs. Retrieval happens first; the "answer" is generated only from what was retrieved.'},
+  {q:'How do you prevent hallucinations?', a:'The AI can only recommend services that exist in the database; every recommendation carries a source and confidence; low-confidence matches are flagged for manual verification; and when nothing matches well, the system says so explicitly instead of guessing.'},
+  {q:'How do you verify government sources?', a:'The prototype uses a curated, hand-checked list of official domains (.gov.in / nic.in and equivalent) with a "last verified" date and confidence rating, rather than claiming live verification it doesn\'t perform.'},
+  {q:'How is citizen data protected?', a:'This prototype stores conversation/profile data only in-browser memory for the session (no server, no external transmission). A production build would add authentication, encryption at rest, and a strict data-minimisation policy.'},
+  {q:'What happens if AI is uncertain?', a:'The result explicitly shows a Low/Medium/High confidence rating, and when no service scores highly enough, the assistant says it could not confidently identify a match and points the citizen to MyScheme, India.gov.in, or manual search instead.'},
+  {q:'How can this scale?', a:'The service database is structured for a real database (SQLite → PostgreSQL) and the retrieval/response functions are written as swappable modules — the keyword search can be replaced by a vector database, and the mock AI layer by a real LLM behind the same function signatures.'},
+  {q:'How can this integrate with real government APIs?', a:'Wherever official real-time APIs exist (e.g. status-tracking on scheme portals), the "Government Service Retrieval" step could call them directly. For now the prototype is explicit that this is a curated demo database, not a live integration.'},
+  {q:'What is your database architecture?', a:'A normalized schema of users, services, sources, conversations, messages, recommendations, saved_services and verification_logs — designed for SQLite in this prototype and directly portable to PostgreSQL.'},
+  {q:'What is your future scope?', a:'Real LLM integration with retrieval grounding, live scheme APIs, application-status tracking, multilingual support beyond the current demo layer, and a verified-partner programme with state government departments.'}
+];
+
+/* ------------------------------ 2. STATE -------------------------------- */
+
+const state = {
+  view:'home',
+  lang:'en',
+  chat:{ log:[], intent:null, confidence:0, answers:{}, pendingQuestions:[], askedCount:0, totalQuestions:0, awaitingFreeText:false, resultServices:null, demoRunning:false },
+  history:[],          // {id, service_name, status, ts}
+  saved:[],            // service ids
+  adminServices: JSON.parse(JSON.stringify(SERVICES)),
+  search:'',
+  grievance:{ log:[], stage:'idle' },
+  toast:null
+};
+
+function uid(){ return Math.random().toString(36).slice(2,9); }
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+
+/* --------------------------- 3. CORE AI LOGIC --------------------------- */
+
+// Rule-based intent detector — scores each intent by keyword occurrence.
+function detectIntent(text){
+  const t = (' '+text.toLowerCase()+' ');
+  let best = {key:null, score:0, label:null};
+  INTENTS.forEach(intent=>{
+    let score = 0;
+    intent.keywords.forEach(k=>{ if(t.includes(k.toLowerCase())) score += (k.split(' ').length>1?2:1); });
+    if(score > best.score) best = {key:intent.key, score, label:intent.label};
+  });
+  if(best.score===0) return {key:null,label:'Other / Unclear', confidence:0};
+  const confidence = Math.min(96, 55 + best.score*10);
+  return {key:best.key, label:best.label, confidence};
+}
+
+// Government Service Retrieval — the "R" in RAG.
+function retrieveRelevantServices(intentKey, answers, sourceList){
+  const pool = (sourceList||SERVICES);
+  let candidates = pool.filter(s => s.category===intentKey);
+  if(candidates.length===0){
+    // fallback: keyword match against free text answers
+    candidates = pool;
+  }
+  const scored = candidates.map(s=>{
+    let score = 40; // base score for category match
+    const ans = Object.values(answers||{}).join(' ').toLowerCase();
+    s.keywords.forEach(k=>{ if(ans.includes(k.toLowerCase())) score += 8; });
+    if(answers && answers.income){
+      if(answers.income.includes('Below') || answers.income.includes('1–2.5')) score += 10;
+    }
+    if(answers && answers.existing==='No') score += 6;
+    if(answers && answers.land && answers.land.startsWith('Yes')) score += 10;
+    score = Math.min(97, score);
+    return {service:s, score};
+  }).sort((a,b)=>b.score-a.score);
+  return scored.slice(0,3);
+}
+
+function confidenceLabel(score){
+  if(score>=80) return 'High';
+  if(score>=60) return 'Medium';
+  return 'Low';
+}
+
+// Grounded response generator — the "G" in RAG. Builds explanation text
+// strictly from the retrieved service record + collected answers; never
+// invents new facts.
+function generateGroundedResponse(service, answers){
+  const why = [];
+  if(answers.state) why.push('You are located in '+answers.state+(service.states.includes('All')?' (scheme applies nationwide)':''));
+  if(answers.level) why.push('Matches your education level: '+answers.level);
+  if(answers.income) why.push('Income bracket considered: '+answers.income);
+  if(answers.employment) why.push('Employment status considered: '+answers.employment);
+  if(answers.land) why.push('Land ownership status: '+answers.land);
+  if(answers.assist) why.push('Type of assistance requested: '+answers.assist);
+  if(why.length===0) why.push('Matched based on the category of your request: '+service.category);
+  return why;
+}
+
+/* ------------------------------- 4. ROUTER ------------------------------- */
+
+function navigate(view){
+  state.view = view;
+  window.scrollTo({top:0, behavior:'reduced-motion' in window ? 'auto' : 'smooth'});
+  render();
+}
+window.navigate = navigate;
+
+/* ------------------------------ 5. RENDER -------------------------------- */
+
+function render(){
+  const app = document.getElementById('app');
+  app.innerHTML = topbarHtml() + navHtml() + `<main id="main">` + viewHtml() + `</main>` + footerHtml();
+  bindGlobalEvents();
+}
+
+function topbarHtml(){
+  return `
+  <div class="topbar">
+    <div style="display:flex;align-items:center;">
+      <span class="flag-strip"><span style="background:#B5651D"></span><span style="background:#fff"></span><span style="background:#136C53"></span></span>
+      <span>Government of India — Citizen Services Assistant (Prototype)</span>
+    </div>
+    <div class="topbar-right">
+      <label for="langsel" style="font-size:12px;">Language</label>
+      <select id="langsel" onchange="setLang(this.value)">
+        <option value="en" ${state.lang==='en'?'selected':''}>English</option>
+        <option value="hi" ${state.lang==='hi'?'selected':''}>हिन्दी</option>
+        <option value="mr" ${state.lang==='mr'?'selected':''}>मराठी</option>
+      </select>
+    </div>
+  </div>`;
+}
+
+function setLang(l){ state.lang = l; render(); }
+window.setLang = setLang;
+
+const I18N = {
+  en:{tagline:'Your AI Guide to Government Services', hero:"Don't know which government service you need?", heroSub:'Describe your problem in plain language — NagrikMitra AI will find the right scheme, check eligibility, and lay out an action plan.', cta:'Find My Service'},
+  hi:{tagline:'सरकारी सेवाओं के लिए आपका एआई मार्गदर्शक', hero:'पता नहीं कौन सी सरकारी सेवा आपके लिए है?', heroSub:'अपनी समस्या सरल भाषा में बताएं — NagrikMitra AI सही योजना खोजेगा। (डेमो अनुवाद)', cta:'मेरी सेवा खोजें'},
+  mr:{tagline:'शासकीय सेवांसाठी तुमचा एआय मार्गदर्शक', hero:'कोणती शासकीय सेवा तुम्हाला हवी आहे हे माहीत नाही?', heroSub:'तुमची समस्या सोप्या भाषेत सांगा — NagrikMitra AI योग्य योजना शोधेल. (डेमो भाषांतर)', cta:'माझी सेवा शोधा'}
+};
+
+function navHtml(){
+  const links = [
+    ['home','Home'],['assistant','Assistant'],['services','Services'],
+    ['dashboard','My Dashboard'],['platforms','Official Platforms'],['jury','About / Jury']
+  ];
+  return `
+  <nav class="mainnav">
+    <div class="nav-inner">
+      <button class="brand" onclick="navigate('home')" aria-label="NagrikMitra AI home">
+        <span class="brand-mark">NM</span>
+        <span class="brand-text"><span class="name">NagrikMitra AI</span><br/><span class="tag">${I18N[state.lang].tagline}</span></span>
+      </button>
+      <div class="navlinks" role="navigation" aria-label="Main">
+        ${links.map(([v,l])=>`<button class="${state.view===v?'active':''}" onclick="navigate('${v}')">${l}</button>`).join('')}
+        <button onclick="navigate('admin')" class="${state.view==='admin'?'active':''}">Admin</button>
+      </div>
+    </div>
+  </nav>`;
+}
+
+function footerHtml(){
+  return `
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <h4>NagrikMitra AI</h4>
+          <p style="color:#8FA1B3;font-size:13px;max-width:36ch;">A prototype AI assistant that helps citizens discover the right government service, verified against official sources.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <p><a href="#" onclick="navigate('assistant');return false;">AI Assistant</a></p>
+          <p><a href="#" onclick="navigate('services');return false;">Browse Services</a></p>
+          <p><a href="#" onclick="navigate('platforms');return false;">Official Platforms</a></p>
+        </div>
+        <div>
+          <h4>Citizen</h4>
+          <p><a href="#" onclick="navigate('dashboard');return false;">My Dashboard</a></p>
+          <p><a href="#" onclick="navigate('grievance');return false;">Grievance Help</a></p>
+        </div>
+        <div>
+          <h4>Project</h4>
+          <p><a href="#" onclick="navigate('jury');return false;">For Jury</a></p>
+          <p><a href="#" onclick="navigate('admin');return false;">Admin</a></p>
+        </div>
+      </div>
+      <div class="disclaimer">
+        <strong>Disclaimer:</strong> NagrikMitra AI is a prototype intended to help citizens discover relevant government services. Information should be verified on the linked official government portal before taking action. The system does not replace official government authorities.
+      </div>
+    </div>
+  </footer>`;
+}
+
+function viewHtml(){
+  switch(state.view){
+    case 'home': return homeView();
+    case 'assistant': return assistantView();
+    case 'results': return resultsView();
+    case 'services': return servicesView();
+    case 'dashboard': return dashboardView();
+    case 'platforms': return platformsView();
+    case 'grievance': return grievanceView();
+    case 'admin': return adminView();
+    case 'jury': return juryView();
+    default: return homeView();
+  }
+}
+
+/* ------------------------------ HOME VIEW -------------------------------- */
+
+function homeView(){
+  const t = I18N[state.lang];
+  return `
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <span class="eyebrow">✦ AI-assisted · Government-source-verified</span>
+      <h1>${t.hero}</h1>
+      <p class="sub">${t.heroSub}</p>
+      <form class="ask-box" onsubmit="event.preventDefault(); startAssistantWith(document.getElementById('heroInput').value);">
+        <textarea id="heroInput" rows="1" placeholder="e.g. I am a 24-year-old student from Maharashtra and I need financial help for my education." aria-label="Describe your problem"></textarea>
+        <button class="btn btn-saffron" type="submit">${t.cta} →</button>
+      </form>
+      <div class="hero-hint">Not sure what to type? <button onclick="navigate('assistant')">Try Demo Mode</button> instead.</div>
+      <div class="token-chip">🎫 Every recommendation gets a traceable <b>Token No.</b> — just like a real service-desk counter — so you always know what was checked and when.</div>
+      <div class="hero-stats">
+        <div class="stat"><b>${SERVICES.length}</b><span>Government services indexed</span></div>
+        <div class="stat"><b>15</b><span>Life-situation categories</span></div>
+        <div class="stat"><b>100%</b><span>Recommendations sourced to an official portal</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div><span class="kicker">Popular</span><h2>Popular services citizens search for</h2></div>
+        <button class="btn btn-outline" onclick="navigate('services')">Browse all services →</button>
+      </div>
+      <div class="grid grid-4">
+        ${SERVICES.slice(0,8).map(s=>serviceCardMini(s)).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="section tight" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+    <div class="wrap">
+      <div class="section-head"><div><span class="kicker">How it works</span><h2>From plain language to a verified action plan</h2></div></div>
+      <div class="steps-row">
+        <div class="step-item"><span class="num">01</span><h4>Describe your problem</h4><p>Type your situation the way you'd say it out loud — no scheme names needed.</p></div>
+        <div class="step-item"><span class="num">02</span><h4>Answer a few questions</h4><p>Only what's necessary — state, income, category — nothing more.</p></div>
+        <div class="step-item"><span class="num">03</span><h4>Get a matched service</h4><p>Retrieved from a curated government-service database, never invented.</p></div>
+        <div class="step-item"><span class="num">04</span><h4>Follow the action plan</h4><p>Eligibility, documents, steps, and a link straight to the official portal.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid grid-2" style="align-items:center;">
+      <div>
+        <span class="kicker">Trust & verification</span>
+        <h2>Every answer is sourced — nothing is invented</h2>
+        <p style="font-size:15px;">NagrikMitra AI only recommends services that exist in its curated database. Each recommendation shows the official source, a confidence rating, and the date it was last verified. If we're not confident, we say so — and point you to official search tools instead of guessing.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <span class="pill pill-teal">✓ Official Government Source</span>
+          <span class="pill pill-saffron">Confidence Rating Shown</span>
+          <span class="pill pill-muted">Demo data clearly labelled</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Why this recommendation?</h3>
+        <p class="desc">Example of the transparency panel shown on every result:</p>
+        <div class="why-box">
+          <h4>Why this matches</h4>
+          <ul class="checklist">
+            <li><span class="tick">✓</span> You are located in Maharashtra</li>
+            <li><span class="tick">✓</span> Matches your education level: Undergraduate</li>
+            <li><span class="tick">✓</span> Income bracket considered: ₹1–2.5 lakh</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section tight" style="background:var(--ink);color:#fff;">
+    <div class="wrap">
+      <div class="section-head"><div><span class="kicker" style="color:#F1C89A;">Official platforms</span><h2 style="color:#fff;">Where your data and applications actually live</h2></div>
+      <button class="btn btn-outline" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.3);" onclick="navigate('platforms')">See all →</button></div>
+      <div class="grid grid-4">
+        ${PLATFORMS.slice(0,4).map(p=>`
+          <div class="card" style="background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12);">
+            <h3 style="color:#fff;font-size:16px;">${p.name}</h3>
+            <p class="desc" style="color:#B9C6D3;">${p.purpose}</p>
+            <a class="btn btn-sm btn-outline" style="background:transparent;color:#F1C89A;border-color:rgba(255,255,255,.25);" href="${p.url}" target="_blank" rel="noopener">Open ↗</a>
+          </div>`).join('')}
+      </div>
+    </div>
+  </section>
+  `;
+}
+
+function serviceCardMini(s){
+  return `
+  <div class="card service-card" onclick="openServiceQuick('${s.id}')" tabindex="0" role="button" aria-label="View ${s.service_name}">
+    <div class="top">
+      <span class="cat">${s.category}</span>
+      <span class="pill pill-${s.confidence==='High'?'teal':s.confidence==='Medium'?'saffron':'red'}">${s.confidence}</span>
+    </div>
+    <h3>${s.service_name}</h3>
+    <p class="desc">${s.description.slice(0,90)}${s.description.length>90?'…':''}</p>
+  </div>`;
+}
+
+function openServiceQuick(id){
+  const s = SERVICES.find(x=>x.id===id);
+  if(!s) return;
+  state.chat.resultServices = [{service:s, score:88}];
+  state.chat.answers = {};
+  navigate('results');
+}
+window.openServiceQuick = openServiceQuick;
+
+function startAssistantWith(text){
+  navigate('assistant');
+  setTimeout(()=>{ if(text && text.trim()) sendMessage(text.trim()); }, 60);
+}
+window.startAssistantWith = startAssistantWith;
+
+/* --------------------------- ASSISTANT VIEW ------------------------------ */
+
+function assistantView(){
+  const c = state.chat;
+  return `
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div><span class="kicker">AI Citizen Assistant</span><h2>Tell NagrikMitra what you need</h2></div>
+      </div>
+      <div class="assistant-shell">
+        <div class="chat-panel">
+          <div class="chat-log" id="chatLog">
+            ${c.log.length===0 ? emptyChatHtml() : c.log.map(chatBubble).join('')}
+          </div>
+          <form class="chat-input-row" onsubmit="event.preventDefault(); handleChatSubmit();">
+            <input id="chatInput" type="text" placeholder="${c.awaitingFreeText? 'Type your answer…' : 'Describe your problem in your own words…'}" aria-label="Message NagrikMitra AI" ${c.demoRunning?'disabled':''}/>
+            <button class="btn btn-primary" type="submit" ${c.demoRunning?'disabled':''}>Send</button>
+          </form>
+        </div>
+        <div class="side-panel">
+          <div class="card">
+            <h3 style="font-size:15px;">Detected Intent</h3>
+            ${c.intent ? `
+              <div class="intent-badge"><span class="dot"></span><strong>${c.intent}</strong></div>
+              <div class="progress-track"><div class="progress-fill" style="width:${c.confidence}%"></div></div>
+              <p style="font-size:12px;margin-top:6px;">Confidence: ${c.confidence}%</p>
+            ` : `<p style="font-size:13px;">Not detected yet — describe your problem to begin.</p>`}
+          </div>
+          <div class="card">
+            <h3 style="font-size:15px;">Questions answered</h3>
+            <p style="font-size:13px;margin-bottom:6px;">${c.askedCount} of ${c.totalQuestions||'—'}</p>
+            <div class="progress-track"><div class="progress-fill" style="width:${c.totalQuestions? (c.askedCount/c.totalQuestions*100):0}%"></div></div>
+          </div>
+          <div class="card">
+            <h3 style="font-size:15px;">Try Demo Mode</h3>
+            <p class="desc">One click runs the full flow — no typing needed.</p>
+            <div class="demo-list">
+              ${DEMO_QUERIES.map(q=>`<button ${c.demoRunning?'disabled':''} onclick="runDemo(${JSON.stringify(q)})">▶ ${q}</button>`).join('')}
+            </div>
+          </div>
+          <button class="btn btn-outline btn-block" onclick="resetAssistant()">↺ Start Again</button>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function emptyChatHtml(){
+  return `<div class="empty-state" style="padding:30px 10px;">
+    <div class="icon">💬</div>
+    <p style="margin:0;">Start by describing your problem — e.g. "I want to apply for a scholarship" or "My pension application is stuck."</p>
+  </div>`;
+}
+
+function chatBubble(m){
+  if(m.type==='system') return `<div class="msg system">${m.text}</div>`;
+  if(m.type==='options') return `<div class="qopts">${m.options.map(o=>`<button onclick="answerQuestion('${m.qid}', ${JSON.stringify(o)})">${o}</button>`).join('')}</div>`;
+  return `<div class="msg ${m.type}">${m.text}</div>`;
+}
+
+function scrollChatToBottom(){
+  const el = document.getElementById('chatLog');
+  if(el) el.scrollTop = el.scrollHeight;
+}
+
+function pushMsg(msg){ state.chat.log.push(msg); }
+
+function handleChatSubmit(){
+  const input = document.getElementById('chatInput');
+  const val = input.value.trim();
+  if(!val){ shakeInput(); return; }
+  input.value='';
+  sendMessage(val);
+}
+window.handleChatSubmit = handleChatSubmit;
+
+function shakeInput(){
+  const input = document.getElementById('chatInput');
+  if(!input) return;
+  input.style.borderColor = 'var(--red)';
+  input.placeholder = 'Please type something before sending…';
+  setTimeout(()=>{ input.style.borderColor=''; }, 900);
+}
+
+function sendMessage(text){
+  const c = state.chat;
+  pushMsg({type:'user', text});
+
+  if(c.awaitingFreeText){
+    // treat as answer to an "Other" state or free text follow-up (rare path)
+    c.awaitingFreeText = false;
+  }
+
+  if(!c.intent){
+    const result = detectIntent(text);
+    if(!result.key){
+      renderThinking(()=>{
+        pushMsg({type:'ai', text:`I couldn't confidently identify a suitable government service from that description. Please try rephrasing, or browse services directly.`});
+        pushMsg({type:'ai', text:`You can also try one of the Demo Mode examples on the right →`});
+        render(); scrollChatToBottom();
+      });
+      return;
+    }
+    c.intent = result.key;
+    c.confidence = result.confidence;
+    c.pendingQuestions = (QUESTIONS[result.key] || QUESTIONS['__default']).slice();
+    c.totalQuestions = c.pendingQuestions.length;
+    c.askedCount = 0;
+    renderThinking(()=>{
+      pushMsg({type:'system', text:`Detected Intent: ${result.label}`});
+      askNextQuestion();
+    });
+    return;
+  }
+  // Free-text sent while questions pending — nudge toward buttons
+  if(c.pendingQuestions.length>0){
+    renderThinking(()=>{
+      pushMsg({type:'ai', text:`Please pick one of the options above so I can match you accurately — or click "Start Again" to describe a different problem.`});
+      render(); scrollChatToBottom();
+    });
+  }
+}
+window.sendMessage = sendMessage;
+
+function askNextQuestion(){
+  const c = state.chat;
+  render(); scrollChatToBottom();
+  if(c.pendingQuestions.length===0){
+    finishAssistant();
+    return;
+  }
+  const q = c.pendingQuestions[0];
+  pushMsg({type:'ai', text:q.label});
+  pushMsg({type:'options', qid:q.id, options:q.options});
+  render(); scrollChatToBottom();
+}
+
+function answerQuestion(qid, value){
+  const c = state.chat;
+  c.answers[qid] = value;
+  pushMsg({type:'user', text:value});
+  c.pendingQuestions.shift();
+  c.askedCount++;
+  renderThinking(()=>{ askNextQuestion(); }, 500);
+}
+window.answerQuestion = answerQuestion;
+
+function renderThinking(cb, delay){
+  const c = state.chat;
+  pushMsg({type:'ai', text:'<span class="typing"><span></span><span></span><span></span></span>'});
+  render(); scrollChatToBottom();
+  setTimeout(()=>{
+    c.log.pop(); // remove typing indicator
+    cb();
+  }, delay || 550);
+}
+
+function finishAssistant(){
+  const c = state.chat;
+  const stages = ['Understanding your request…','Finding relevant government services…','Checking available information…'];
+  let i=0;
+  function step(){
+    pushMsg({type:'ai', text:`<span class="typing"><span></span><span></span><span></span></span> <span style="font-size:12px;color:var(--muted);">${stages[i]}</span>`});
+    render(); scrollChatToBottom();
+    setTimeout(()=>{
+      c.log.pop();
+      i++;
+      if(i<stages.length){ step(); }
+      else{
+        const matches = retrieveRelevantServices(c.intent, c.answers, state.adminServices);
+        c.resultServices = matches;
+        pushMsg({type:'ai', text:`Here's what I found. Opening your personalised result…`});
+        render(); scrollChatToBottom();
+        setTimeout(()=>{ navigate('results'); }, 600);
+      }
+    }, 550);
+  }
+  step();
+}
+
+function resetAssistant(){
+  state.chat = { log:[], intent:null, confidence:0, answers:{}, pendingQuestions:[], askedCount:0, totalQuestions:0, awaitingFreeText:false, resultServices:null, demoRunning:false };
+  render();
+}
+window.resetAssistant = resetAssistant;
+
+function runDemo(query){
+  resetAssistant();
+  state.chat.demoRunning = true;
+  render();
+  setTimeout(()=>{ sendMessage(query); }, 300);
+  // release the "demo running" lock once we land on results (checked in finishAssistant chain)
+  const check = setInterval(()=>{
+    if(state.view==='results'){ state.chat.demoRunning=false; clearInterval(check); }
+  }, 400);
+}
+window.runDemo = runDemo;
+
+/* ---------------------------- RESULTS VIEW -------------------------------- */
+
+function resultsView(){
+  const matches = state.chat.resultServices;
+  if(!matches || matches.length===0){
+    return `<section class="section"><div class="wrap">
+      <div class="empty-state">
+        <div class="icon">🔍</div>
+        <h3>No recommendation to show yet</h3>
+        <p>Start a conversation with the assistant to get a personalised, verified recommendation.</p>
+        <button class="btn btn-primary" onclick="navigate('assistant')">Go to Assistant</button>
+      </div>
+    </div></section>`;
+  }
+  const top = matches[0];
+  const s = top.service;
+  const conf = confidenceLabel(top.score);
+  const why = generateGroundedResponse(s, state.chat.answers);
+  const token = 'NM-'+ new Date().getFullYear() +'-'+ uid().toUpperCase();
+
+  return `
+  <section class="section">
+    <div class="wrap">
+      <div class="pill pill-muted mono" style="margin-bottom:16px;">🎫 Token No. ${token} &nbsp;·&nbsp; Generated ${new Date().toLocaleString()}</div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <div class="result-header">
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div class="match-ring" style="--pct:${top.score}"><div class="inner"><b>${top.score}%</b><span>MATCH</span></div></div>
+            <div>
+              <span class="cat">${s.category}</span>
+              <h2 style="margin-bottom:4px;">${s.service_name}</h2>
+              <p style="margin:0;max-width:60ch;">${s.description}</p>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+            <span class="pill pill-${conf==='High'?'teal':conf==='Medium'?'saffron':'red'}">Confidence: ${conf}</span>
+            <span class="pill pill-teal">✓ Official Government Source</span>
+          </div>
+        </div>
+
+        <div class="why-box" style="margin-bottom:20px;">
+          <h4>Why this recommendation?</h4>
+          <ul class="checklist">${why.map(w=>`<li><span class="tick">✓</span>${w}</li>`).join('')}</ul>
+        </div>
+
+        <div class="grid grid-2" style="margin-bottom:20px;">
+          <div>
+            <h4 style="font-size:14.5px;">Eligibility</h4>
+            <ul class="checklist">${s.eligibility.map(e=>`<li><span class="tick">✓</span>${e}</li>`).join('')}</ul>
+          </div>
+          <div>
+            <h4 style="font-size:14.5px;">Required Documents</h4>
+            <div class="doclist">${s.required_documents.map(d=>`<span>${d}</span>`).join('')}</div>
+          </div>
+        </div>
+
+        <div class="source-box" style="margin-bottom:20px;">
+          <div>
+            <div class="badge-inline" style="color:var(--teal);">✓ Verified Government Source</div>
+            <p style="margin:2px 0 0;font-size:13px;">${s.source_name}</p>
+            <p style="margin:0;font-size:12px;color:var(--muted);">Last verified: ${s.last_verified}</p>
+          </div>
+          <a class="btn btn-primary" href="${s.official_url}" target="_blank" rel="noopener">Open Official Website ↗</a>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-outline" onclick="toggleSave('${s.id}')">${state.saved.includes(s.id)?'✓ Saved':'☆ Save This Service'}</button>
+          <button class="btn btn-outline" onclick="scrollToDocs()">📄 View Required Documents</button>
+          <button class="btn btn-outline" onclick="resetAssistant();navigate('assistant')">↺ Start Again</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <h3>Your Action Plan</h3>
+        <ol class="actionplan">
+          ${actionPlanSteps(s).map((step,i)=>`
+            <li><span class="apnum">${i+1}</span><div><h4>${step.title}</h4><p>${step.desc}</p></div></li>
+          `).join('')}
+        </ol>
+      </div>
+
+      ${matches.length>1 ? `
+      <div class="card">
+        <h3>Other possible matches</h3>
+        <div class="grid grid-2">
+          ${matches.slice(1).map(m=>`
+            <div class="card service-card" onclick="selectAlt('${m.service.id}')">
+              <div class="top"><span class="cat">${m.service.category}</span><span class="pill pill-muted">${m.score}% match</span></div>
+              <h3 style="font-size:15px;">${m.service.service_name}</h3>
+              <p class="desc">${m.service.description.slice(0,90)}…</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>` : ''}
+    </div>
+  </section>`;
+}
+
+function actionPlanSteps(s){
+  return [
+    {title:'Check eligibility', desc:'Compare your situation against: '+s.eligibility[0]},
+    {title:'Prepare required documents', desc:'Gather: '+s.required_documents.slice(0,3).join(', ')+(s.required_documents.length>3?', and more.':'.')},
+    {title:'Open the official application portal', desc:'Use the verified link above — '+s.official_url.replace('https://','')},
+    {title:'Submit your application', desc: s.application_steps[Math.min(2,s.application_steps.length-1)] },
+    {title:'Track your application', desc:'Save this service to your dashboard so you can follow up and update its status.'}
+  ];
+}
+
+function scrollToDocs(){ /* documents are inline; smooth-scroll no-op if already visible */ }
+window.scrollToDocs = scrollToDocs;
+
+function selectAlt(id){
+  const s = SERVICES.find(x=>x.id===id) || state.adminServices.find(x=>x.id===id);
+  if(!s) return;
+  state.chat.resultServices = [{service:s, score: state.chat.resultServices.find(m=>m.service.id===id)?.score || 75}, ...state.chat.resultServices.filter(m=>m.service.id!==id)];
+  render();
+}
+window.selectAlt = selectAlt;
+
+function toggleSave(id){
+  const s = SERVICES.find(x=>x.id===id);
+  const idx = state.saved.indexOf(id);
+  if(idx>-1){ state.saved.splice(idx,1); }
+  else{
+    state.saved.push(id);
+    state.history.unshift({id:uid(), service_name:s.service_name, status:'Saved', ts:new Date().toLocaleString()});
+  }
+  render();
+}
+window.toggleSave = toggleSave;
+
+/* ---------------------------- SERVICES VIEW ------------------------------- */
+
+function servicesView(){
+  const q = state.search.toLowerCase();
+  const cats = ['All', ...new Set(SERVICES.map(s=>s.category))];
+  const filtered = SERVICES.filter(s=>{
+    if(!q) return true;
+    return (s.service_name+' '+s.description+' '+s.keywords.join(' ')).toLowerCase().includes(q);
+  });
+  return `
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div><span class="kicker">Directory</span><h2>Browse government services</h2></div>
+      </div>
+      <div style="margin-bottom:24px;max-width:480px;">
+        <label for="svcsearch">Search services</label>
+        <input id="svcsearch" type="search" placeholder="Try “scholarship”, “farmer”, “pension”, “certificate”…" value="${state.search}" oninput="onSearch(this.value)"/>
+      </div>
+      <div class="grid grid-3">
+        ${filtered.length? filtered.map(s=>serviceCardFull(s)).join('') : `<div class="empty-state" style="grid-column:1/-1;"><div class="icon">🔍</div><p>No services match “${state.search}”. Try a different keyword.</p></div>`}
+      </div>
+    </div>
+  </section>`;
+}
+
+function serviceCardFull(s){
+  return `
+  <div class="card service-card" onclick="openServiceQuick('${s.id}')">
+    <div class="top">
+      <span class="cat">${s.category}</span>
+      <span class="pill pill-${s.confidence==='High'?'teal':s.confidence==='Medium'?'saffron':'red'}">${s.confidence}</span>
+    </div>
+    <h3>${s.service_name}</h3>
+    <p class="desc">${s.description}</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+      <span style="font-size:12px;color:var(--muted);">Last verified ${s.last_verified}</span>
+      <span class="btn btn-sm btn-ghost">View →</span>
+    </div>
+  </div>`;
+}
+
+function onSearch(v){ state.search = v; render(); document.getElementById('svcsearch').focus(); document.getElementById('svcsearch').value=v; }
+window.onSearch = onSearch;
+
+/* --------------------------- DASHBOARD VIEW ------------------------------- */
+
+function dashboardView(){
+  const savedSvcs = SERVICES.filter(s=>state.saved.includes(s.id));
+  return `
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><div><span class="kicker">My Government Services</span><h2>Your dashboard</h2></div></div>
+
+      <div class="card" style="margin-bottom:20px;">
+        <h3 style="font-size:15px;">Saved & researched services</h3>
+        ${savedSvcs.length? `
+        <table>
+          <thead><tr><th>Service</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            ${savedSvcs.map(s=>`<tr>
+              <td>${s.service_name}</td>
+              <td><span class="pill pill-teal">Saved</span></td>
+              <td><button class="btn btn-sm btn-outline" onclick="openServiceQuick('${s.id}')">View</button></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>` : `<div class="empty-state" style="padding:30px 0;"><div class="icon">📌</div><p>No saved services yet. Save a recommendation to track it here.</p></div>`}
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:15px;">Recent activity</h3>
+        ${state.history.length? `
+        <table>
+          <thead><tr><th>Service</th><th>Status</th><th>When</th></tr></thead>
+          <tbody>
+            ${state.history.map(h=>`<tr><td>${h.service_name}</td><td><span class="pill pill-muted">${h.status}</span></td><td style="color:var(--muted);">${h.ts}</td></tr>`).join('')}
+          </tbody>
+        </table>` : `<div class="empty-state" style="padding:30px 0;"><div class="icon">🕒</div><p>No activity yet this session.</p></div>`}
+        <p style="font-size:12px;margin-top:12px;">Note: this prototype keeps dashboard data in-browser for the current session only (no backend database yet) — see README for the upgrade path to persistent storage.</p>
+      </div>
+    </div>
+  </section>`;
+}
+
+/* --------------------------- PLATFORMS VIEW -------------------------------- */
+
+function platformsView(){
+  return `
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><div><span class="kicker">Official platforms</span><h2>Trusted government platforms</h2></div></div>
+      <div class="grid grid-3">
+        ${PLATFORMS.map(p=>`
+          <div class="card">
+            <h3>${p.name}</h3>
+            <p style="font-size:12.5px;font-weight:600;color:var(--saffron);text-transform:uppercase;letter-spacing:.03em;">${p.purpose}</p>
+            <p class="desc">${p.description}</p>
+            <p style="font-size:12px;color:var(--muted);">Source: ${p.source}</p>
+            <a class="btn btn-primary btn-sm" href="${p.url}" target="_blank" rel="noopener">Open ${p.name} ↗</a>
+          </div>`).join('')}
+      </div>
+    </div>
+  </section>`;
+}
+
+/* --------------------------- GRIEVANCE VIEW -------------------------------- */
+
+function grievanceView(){
+  const g = state.grievance;
+  return `
+  <section class="section">
+    <div class="wrap" style="max-width:760px;">
+      <div class="section-head"><div><span class="kicker">Grievance help</span><h2>Something not working as it should?</h2></div></div>
+      <div class="card">
+        <label for="grtext">Describe what's happened</label>
+        <textarea id="grtext" class="field" rows="3" placeholder="e.g. My government application has been pending for 30 days."></textarea>
+        <button class="btn btn-primary" style="margin-top:12px;" onclick="analyzeGrievance()">Analyse</button>
+
+        ${g.stage==='result' ? `
+        <div style="margin-top:24px;">
+          <div class="pill pill-saffron" style="margin-bottom:14px;">Intent: Government Grievance</div>
+          <div class="why-box" style="margin-bottom:18px;">
+            <h4>Possible next steps</h4>
+            <ul class="checklist">
+              <li><span class="tick">✓</span>Check your application/reference number status on the relevant department's own portal first</li>
+              <li><span class="tick">✓</span>If unresolved beyond the stated turnaround time, file a formal grievance on CPGRAMS</li>
+              <li><span class="tick">✓</span>Keep your reference/application ID and any communication ready before filing</li>
+            </ul>
+          </div>
+          <div class="source-box">
+            <div>
+              <div class="badge-inline" style="color:var(--teal);">✓ Verified Government Source</div>
+              <p style="margin:2px 0 0;font-size:13px;">CPGRAMS — Department of Administrative Reforms & Public Grievances</p>
+            </div>
+            <a class="btn btn-primary" href="https://pgportal.gov.in" target="_blank" rel="noopener">Open Official Grievance Portal ↗</a>
+          </div>
+          <p style="font-size:12px;margin-top:14px;">This prototype does not submit a grievance on your behalf — it only routes you to the real CPGRAMS portal, since no live submission API is connected here.</p>
+        </div>` : ''}
+      </div>
+    </div>
+  </section>`;
+}
+
+function analyzeGrievance(){
+  const text = document.getElementById('grtext').value.trim();
+  if(!text){ return; }
+  state.grievance.stage='result';
+  render();
+}
+window.analyzeGrievance = analyzeGrievance;
+
+/* ----------------------------- ADMIN VIEW ---------------------------------- */
+
+function adminView(){
+  return `
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div><span class="kicker">Data management (demo)</span><h2>Admin dashboard</h2></div>
+        <button class="btn btn-primary" onclick="openAdminForm()">+ Add service</button>
+      </div>
+      <p style="font-size:13px;margin-top:-10px;">No production authentication in this prototype — for hackathon demo purposes only, as noted in the brief.</p>
+      <div id="adminFormWrap"></div>
+      <div class="card">
+        <table>
+          <thead><tr><th>Service</th><th>Category</th><th>Confidence</th><th>Last verified</th><th>Actions</th></tr></thead>
+          <tbody>
+            ${state.adminServices.map(s=>`
+            <tr>
+              <td>${s.service_name}</td>
+              <td>${s.category}</td>
+              <td><span class="pill pill-${s.confidence==='High'?'teal':s.confidence==='Medium'?'saffron':'red'}">${s.confidence}</span></td>
+              <td>${s.last_verified}</td>
+              <td style="white-space:nowrap;">
+                <button class="btn btn-sm btn-outline" onclick="markVerified('${s.id}')">Mark verified</button>
+                <button class="btn btn-sm btn-outline" onclick="editAdminService('${s.id}')">Edit</button>
+                <button class="btn btn-sm btn-outline" style="color:var(--red);border-color:#f0c9c9;" onclick="deleteAdminService('${s.id}')">Delete</button>
+              </td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>`;
+}
+
+function markVerified(id){
+  const s = state.adminServices.find(x=>x.id===id);
+  if(s){ s.last_verified = todayStr(); render(); }
+}
+window.markVerified = markVerified;
+
+function deleteAdminService(id){
+  state.adminServices = state.adminServices.filter(x=>x.id!==id);
+  render();
+}
+window.deleteAdminService = deleteAdminService;
+
+let adminEditingId = null;
+function openAdminForm(existing){
+  adminEditingId = existing ? existing.id : null;
+  const s = existing || {service_name:'',category:'',description:'',official_url:'',source_name:'',confidence:'Medium'};
+  document.getElementById('adminFormWrap').innerHTML = `
+    <div class="card" style="margin-bottom:20px;">
+      <h3 style="font-size:15px;">${existing? 'Edit service' : 'Add new service'}</h3>
+      <div class="grid grid-2">
+        <div class="field-row"><label>Service name</label><input id="af_name" type="text" value="${s.service_name}"/></div>
+        <div class="field-row"><label>Category</label><input id="af_cat" type="text" value="${s.category}"/></div>
+      </div>
+      <div class="field-row"><label>Description</label><input id="af_desc" type="text" value="${s.description}"/></div>
+      <div class="grid grid-2">
+        <div class="field-row"><label>Official URL</label><input id="af_url" type="text" value="${s.official_url}"/></div>
+        <div class="field-row"><label>Source name</label><input id="af_src" type="text" value="${s.source_name}"/></div>
+      </div>
+      <div class="field-row" style="max-width:200px;">
+        <label>Confidence</label>
+        <select id="af_conf"><option ${s.confidence==='High'?'selected':''}>High</option><option ${s.confidence==='Medium'?'selected':''}>Medium</option><option ${s.confidence==='Low'?'selected':''}>Low</option></select>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-primary" onclick="saveAdminService()">Save</button>
+        <button class="btn btn-outline" onclick="document.getElementById('adminFormWrap').innerHTML=''">Cancel</button>
+      </div>
+    </div>`;
+}
+window.openAdminForm = openAdminForm;
+
+function editAdminService(id){
+  const s = state.adminServices.find(x=>x.id===id);
+  openAdminForm(s);
+}
+window.editAdminService = editAdminService;
+
+function saveAdminService(){
+  const vals = {
+    service_name: document.getElementById('af_name').value.trim(),
+    category: document.getElementById('af_cat').value.trim(),
+    description: document.getElementById('af_desc').value.trim(),
+    official_url: document.getElementById('af_url').value.trim(),
+    source_name: document.getElementById('af_src').value.trim(),
+    confidence: document.getElementById('af_conf').value
+  };
+  if(!vals.service_name || !vals.official_url){ alert('Service name and Official URL are required.'); return; }
+  if(adminEditingId){
+    const s = state.adminServices.find(x=>x.id===adminEditingId);
+    Object.assign(s, vals);
+  } else {
+    state.adminServices.push(Object.assign({
+      id:'svc-'+uid(), states:['All'], eligibility:[], required_documents:[], application_steps:[],
+      last_verified: todayStr(), keywords:[vals.service_name.toLowerCase()]
+    }, vals));
+  }
+  document.getElementById('adminFormWrap').innerHTML='';
+  render();
+}
+window.saveAdminService = saveAdminService;
+
+/* ------------------------------ JURY VIEW ---------------------------------- */
+
+function juryView(){
+  return `
+  <section class="section">
+    <div class="wrap" style="max-width:860px;">
+      <div class="section-head"><div><span class="kicker">For Jury / Project Information</span><h2>NagrikMitra AI — project brief</h2></div></div>
+      <div class="card" style="margin-bottom:24px;">
+        <h3>Jury demo flow</h3>
+        <p>Click below to auto-run the full reference scenario: a student from Maharashtra asking for financial help with education.</p>
+        <button class="btn btn-saffron" onclick="runDemo(${JSON.stringify(DEMO_QUERIES[0])})">▶ Start Jury Demo</button>
+      </div>
+      <div class="card">
+        ${JURY_QA.map(item=>`<div class="qa-item"><h4>${item.q}</h4><p>${item.a}</p></div>`).join('')}
+      </div>
+    </div>
+  </section>`;
+}
+
+/* ----------------------------- BIND EVENTS --------------------------------- */
+
+function bindGlobalEvents(){
+  const hero = document.getElementById('heroInput');
+  if(hero){
+    hero.addEventListener('keydown', e=>{
+      if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); startAssistantWith(hero.value); }
+    });
+  }
+  scrollChatToBottom();
+}
+
+/* -------------------------------- INIT -------------------------------------- */
+render();
+</script>
+</body>
+</html>
